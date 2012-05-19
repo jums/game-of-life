@@ -11,7 +11,12 @@ namespace Jums.GameOfLife.CoreC
     /// </summary>
     class GrimReaper
     {
-        public GrimReaper() {} //World world
+        private World world;
+
+        public GrimReaper(World world) 
+        {
+            this.world = world;
+        }
 
         public bool IsAlive(int x, int y)
         {

@@ -10,12 +10,9 @@ namespace Jums.GameOfLife.CoreC
     /// </summary>
     public class Game
     {
-        private GrimReaper grimReaper;
+        //private GrimReaper grimReaper;
 
-        public Game()
-        {
-            grimReaper = new GrimReaper();
-        }
+        public Game() {}
 
         /// <summary>
         /// Maximum number of "ticks", rounds, years, units of time.
