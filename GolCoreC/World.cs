@@ -9,6 +9,7 @@ namespace Jums.GameOfLife.CoreC
     class World
     {
         public const int MinimumSize = 10;
+        private int fillRate = 50;
 
         public World(int width, int height)
         {
@@ -23,6 +24,20 @@ namespace Jums.GameOfLife.CoreC
         public int Width { get; private set; }
         public int Height { get; private set; }
         private List<bool> LifeStates { get; set; }
+        
+        public int FillRate 
+        {
+            get 
+            { 
+                return fillRate; 
+            }
+            set 
+            {
+                if (value > 100) fillRate = 100;
+                else if (value < 0) fillRate = 0;
+                else fillRate = value;
+            }
+        }
 
         public bool IsAlive(int x, int y)
         {
@@ -38,6 +53,12 @@ namespace Jums.GameOfLife.CoreC
         internal int GetPositionIndex(int x, int y)
         {
             return y * this.Width + x;
+        }
+
+        internal void CreateLife()
+        {
+            // TODO
+            this.LifeStates[0] = true;
         }
     }
 }

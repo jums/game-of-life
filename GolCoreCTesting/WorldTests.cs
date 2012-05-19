@@ -99,5 +99,34 @@ namespace Jums.GameOfLife.CoreC.Tests
                 }
             }
         }
+
+        [Test]
+        public void SetFillRate()
+        {
+            World world = new World(20, 20);
+            world.FillRate = 10;
+            Assert.AreEqual(10, world.FillRate);
+            world.FillRate = 90;
+            Assert.AreEqual(90, world.FillRate);
+            world.FillRate = 101;
+            Assert.AreEqual(100, world.FillRate);
+            world.FillRate = -5;
+            Assert.AreEqual(0, world.FillRate);
+        }
+
+        [Test]
+        public void RandomizeWorldAintTotallyDead()
+        {
+            World world = new World(20, 20);
+            world.CreateLife();
+
+            var coordinates =
+                from x in Enumerable.Range(0, 20)
+                from y in Enumerable.Range(0, 20)
+                select new { x, y };
+
+            int lifeCount = coordinates.Count(c => world.IsAlive(c.x, c.y));
+            Assert.Greater(lifeCount, 0);
+        }
     }
 }
