@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.CompilerServices;
 
 namespace Jums.GameOfLife.CoreC
 {
@@ -15,6 +16,6 @@ namespace Jums.GameOfLife.CoreC
 
         public int Width { get; private set; }
         public int Height { get; private set; }
-        public List<bool> LifeStates { get; private set; }
+        private List<bool> LifeStates { get; set; }
     }
 }
