@@ -55,10 +55,28 @@ namespace Jums.GameOfLife.CoreC
             return y * this.Width + x;
         }
 
-        internal void CreateLife()
+        /// <summary>
+        /// Fills the world with random life where amount of life versus death is
+        /// precisely determined by the <c>FillRate</c>.
+        /// </summary>
+        public void CreateLife()
         {
-            // TODO
-            this.LifeStates[0] = true;
+            int positions = this.LifeStates.Count;
+            int lifeAmount = (int)Math.Round(this.FillRate / 100f * positions);
+
+            List<bool> life = new List<bool>(positions);
+            life.AddRange(Enumerable.Repeat(true, lifeAmount));
+            life.AddRange(Enumerable.Repeat(false, positions - lifeAmount));
+
+            int seed = (int)(DateTime.Now.Ticks % int.MaxValue + this.GetHashCode());
+            Random random = new Random(seed); // TODO: Take seed from property
+
+            for (int i = 0; i < positions; i++) // loop through actual positions
+            {
+                int lifeIndex = random.Next() % life.Count;
+                this.LifeStates[i] = life[lifeIndex];
+                life.RemoveAt(lifeIndex);
+            }
         }
     }
 }

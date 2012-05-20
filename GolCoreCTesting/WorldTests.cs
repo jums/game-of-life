@@ -118,15 +118,69 @@ namespace Jums.GameOfLife.CoreC.Tests
         public void RandomizeWorldAintTotallyDead()
         {
             World world = new World(20, 20);
+
             world.CreateLife();
+            Assert.Greater(CountLife(world), 0);
+        }
 
+        [Test]
+        public void RandomizeWorldFillsLifeWithFillRate()
+        {
+            World world = new World(20, 20);
+
+            world.FillRate = 50;
+            world.CreateLife();
+            Assert.AreEqual(200, CountLife(world));
+
+            world.FillRate = 66;
+            world.CreateLife();
+            Assert.AreEqual(264, CountLife(world));
+        }
+
+        [Test]
+        public void RandomizeWorldIsRandom() // Ignoring the chance it may create the same world twice.
+        {
+            World world1 = new World(20, 20);
+            world1.CreateLife();
+            var life1 = GetLifeCoordinates(world1);
+
+            World world2 = new World(20, 20);
+            world2.CreateLife();
+            var life2 = GetLifeCoordinates(world2);
+
+            Assert.AreNotEqual(life1, life2);
+        }
+
+        private List<Point> GetLifeCoordinates(World world)
+        {
+            var coordinates = GetAllCoordinates(world);
+            return coordinates.Where(c => world.IsAlive(c.X, c.Y)).ToList();
+        }
+
+        private int CountLife(World world)
+        {
+            var coordinates = GetAllCoordinates(world);
+            return coordinates.Count(c => world.IsAlive(c.X, c.Y));
+        }
+
+        private static IEnumerable<Point> GetAllCoordinates(World world)
+        {
             var coordinates =
-                from x in Enumerable.Range(0, 20)
-                from y in Enumerable.Range(0, 20)
-                select new { x, y };
+                from x in Enumerable.Range(0, world.Width)
+                from y in Enumerable.Range(0, world.Height)
+                select new Point { X = x, Y = y };
+            return coordinates;
+        }
 
-            int lifeCount = coordinates.Count(c => world.IsAlive(c.x, c.y));
-            Assert.Greater(lifeCount, 0);
+        private struct Point
+        {
+            public int X;
+            public int Y;
+
+            public override string ToString()
+            {
+                return string.Format("x:{0} y:{1}", X, Y);
+            }
         }
     }
 }
