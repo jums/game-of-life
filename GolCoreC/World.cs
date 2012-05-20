@@ -6,6 +6,11 @@ using System.Runtime.CompilerServices;
 
 namespace Jums.GameOfLife.CoreC
 {
+    /// <summary>
+    /// The world is a grid of positions that are dead or alive. 
+    /// It doesn't know much else; it just is, flying through space and time
+    /// on the back of a giant tortoise.
+    /// </summary>
     class World
     {
         public const int MinimumSize = 10;
@@ -39,6 +44,14 @@ namespace Jums.GameOfLife.CoreC
             }
         }
 
+        /// <summary>
+        /// Determines whether specified coordinates contain life.
+        /// </summary>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified coordinates have life; otherwise, <c>false</c>.
+        /// </returns>
         public bool IsAlive(int x, int y)
         {
             if (x > this.Width - 1) throw new IndexOutOfRangeException("x was beyond the world, positive.");
