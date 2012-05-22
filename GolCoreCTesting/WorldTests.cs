@@ -9,6 +9,14 @@ namespace Jums.GameOfLife.CoreC.Tests
     [TestFixture]
     public class WorldTests
     {
+        World simpleWorld;
+
+        [TestFixtureSetUp]
+        public void FixtureSetUp()
+        {
+            simpleWorld = new World(10, 10);
+        }
+
         [Test]
         public void CreateWorld()
         {
@@ -148,7 +156,54 @@ namespace Jums.GameOfLife.CoreC.Tests
             world2.CreateLife();
             var life2 = GetLifeCoordinates(world2);
 
-            Assert.AreNotEqual(life1, life2);
+            CollectionAssert.AreNotEquivalent(life1, life2);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ImportShouldThrowFromNullData()
+        {
+            simpleWorld.Import(null);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ImportShouldThrowFromDataWithTooSmallLength()
+        {
+            simpleWorld.Import(Enumerable.Repeat(false, 10 * 10 - 1));
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ImportShouldThrowFromDataWithTooLargeLength()
+        {
+            simpleWorld.Import(Enumerable.Repeat(false, 10 * 10 + 1));
+        }
+
+        [Test]
+        public void ImportShouldAcceptAllDead()
+        {
+            simpleWorld.CreateLife();
+            simpleWorld.Import(Enumerable.Repeat(false, 10 * 10));
+            Assert.True(simpleWorld.Positions.All(p => p == false));
+        }
+
+        [Test]
+        public void ImportShouldAcceptAllAlive()
+        {
+            simpleWorld.CreateLife();
+            simpleWorld.Import(Enumerable.Repeat(true, 10 * 10));
+            Assert.True(simpleWorld.Positions.All(p => p == true));
+        }
+
+        [Test]
+        public void ImportShouldAcceptRandomWorld()
+        {
+            simpleWorld.CreateLife();
+            Random random = new Random();
+            var randomData = Enumerable.Repeat(true, 10 * 10).Select(x => random.Next() % 2 == 0).ToArray();
+            simpleWorld.Import(randomData);
+            CollectionAssert.AreEqual(randomData, simpleWorld.Positions);
         }
 
         private List<Point> GetLifeCoordinates(World world)
@@ -159,8 +214,7 @@ namespace Jums.GameOfLife.CoreC.Tests
 
         private int CountLife(World world)
         {
-            var coordinates = GetAllCoordinates(world);
-            return coordinates.Count(c => world.IsAlive(c.X, c.Y));
+            return world.Positions.Count(p => p == true);
         }
 
         private static IEnumerable<Point> GetAllCoordinates(World world)

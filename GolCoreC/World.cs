@@ -15,6 +15,7 @@ namespace Jums.GameOfLife.CoreC
     {
         public const int MinimumSize = 10;
         private int fillRate = 50;
+        private IList<bool> lifeStates;
 
         public World(int width, int height)
         {
@@ -23,13 +24,26 @@ namespace Jums.GameOfLife.CoreC
 
             this.Width = width;
             this.Height = height;
-            this.LifeStates = Enumerable.Repeat(false, width * height).ToList();
+            this.lifeStates = Enumerable.Repeat(false, width * height).ToList();
         }
 
         public int Width { get; private set; }
         public int Height { get; private set; }
-        private List<bool> LifeStates { get; set; }
-        
+
+        /// <summary>
+        /// Enumeration of all positions in the world.
+        /// </summary>
+        public IEnumerable<bool> Positions
+        {
+            get 
+            {
+                return new ReadOnlyCollectionBuilder<bool>(lifeStates).ToReadOnlyCollection();
+            }
+        }
+
+        /// <summary>
+        /// The percentage of positions that should contain life.
+        /// </summary>
         public int FillRate 
         {
             get 
@@ -60,7 +74,7 @@ namespace Jums.GameOfLife.CoreC
             if (y < 0) throw new IndexOutOfRangeException("y was beyond the world, negative.");
 
             int index = GetPositionIndex(x, y);
-            return this.LifeStates[index];
+            return lifeStates[index];
         }
 
         internal int GetPositionIndex(int x, int y)
@@ -74,7 +88,7 @@ namespace Jums.GameOfLife.CoreC
         /// </summary>
         public void CreateLife()
         {
-            int positions = this.LifeStates.Count;
+            int positions = this.lifeStates.Count;
             int lifeAmount = (int)Math.Round(this.FillRate / 100f * positions);
 
             List<bool> life = new List<bool>(positions);
@@ -87,8 +101,25 @@ namespace Jums.GameOfLife.CoreC
             for (int i = 0; i < positions; i++) // loop through actual positions
             {
                 int lifeIndex = random.Next() % life.Count;
-                this.LifeStates[i] = life[lifeIndex];
+                lifeStates[i] = life[lifeIndex];
                 life.RemoveAt(lifeIndex);
+            }
+        }
+
+        /// <summary>
+        /// Fills the world with the specified life data.
+        /// </summary>
+        /// <param name="data">The life data.</param>
+        public void Import(IEnumerable<bool> data)
+        {
+            if (data == null) throw new ArgumentNullException("data");
+            if (data.Count() != lifeStates.Count) throw new ArgumentException("data", "data was bad length");
+
+            bool[] dataArray = data.ToArray();
+
+            for (int i = 0; i < lifeStates.Count; i++)
+            {
+                lifeStates[i] = dataArray[i];
             }
         }
     }
