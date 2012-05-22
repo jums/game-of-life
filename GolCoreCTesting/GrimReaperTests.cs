@@ -11,41 +11,45 @@ namespace Jums.GameOfLife.CoreC.Tests
     class GrimReaperTests
     {
         GrimReaper reaper;
+        World world;
 
         [TestFixtureSetUp]
         public void SetUp()
         {
             this.reaper = new GrimReaper();
+            this.world = new World(10, 10);
         }
 
         [Test]
         [ExpectedException("System.ArgumentNullException")]
-        public void IsAliveShouldDiscardNullWorld()
+        public void IsAliveShouldThrowWithNullWorld()
         {
             this.reaper.IsAlive(null, 1, 1);
         }
 
         [Test]
-        public void IsAliveShouldBeDeadWhenAllIsDead()
+        public void IsAliveShouldBeFalseWhenZeroAlive()
         {
-            string data = @"
-                ----------
-                -x--------
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------
-                ----------
-";
-
-
-
+            string data = @" ---
+                             -x-
+                             --- ";
+            
+            world.Import(ConvertToWorldData(data, 10, 10));
+            bool value = reaper.IsAlive(world, 1, 1);
         }
 
-        public static IEnumerable<bool> ConvertToWorldData(string data, int width, int height)
+        [Test]
+        public void IsAliveShouldBeFalseWhenOneAlive()
+        {
+            string data = @" --x
+                             -x-
+                             --- ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            bool value = reaper.IsAlive(world, 1, 1);
+        }
+
+        private static IEnumerable<bool> ConvertToWorldData(string data, int width, int height)
         {
             Regex replacer = new Regex(@"[^\n-x]");
             string trimmed = replacer.Replace(data, "");
@@ -64,7 +68,5 @@ namespace Jums.GameOfLife.CoreC.Tests
             string addition = string.Join("", Enumerable.Repeat(character, missingChars));
             return original + addition;
         }
-        
-
     }
 }
