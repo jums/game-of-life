@@ -8,14 +8,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Jums.GameOfLife.CoreC.God">
-    <Position X="7.25" Y="4" Width="1.5" />
+    <Position X="7.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAACAAAAAAAIAAAAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>God.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Jums.GameOfLife.CoreC.GrimReaper">
-    <Position X="4.25" Y="4" Width="1.5" />
+    <Position X="4.25" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>GrimReaper.cs</FileName>
@@ -24,7 +24,7 @@
   <Class Name="Jums.GameOfLife.CoreC.World">
     <Position X="7.25" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAJAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AQCAAAQAJAAEAAAAAAAAAEAAAAABAgAAAAAAAAAAAAA=</HashCode>
       <FileName>World.cs</FileName>
     </TypeIdentifier>
   </Class>
