@@ -11,15 +11,14 @@ namespace Jums.GameOfLife.CoreC
     /// </summary>
     class GrimReaper
     {
-        private World world;
-
-        public GrimReaper(World world) 
+        public GrimReaper() 
         {
-            this.world = world;
         }
 
-        public bool IsAlive(int x, int y)
+        public bool IsAlive(World world, int x, int y)
         {
+            if (world == null) throw new ArgumentNullException("world");
+
             return false;
         }
     }
