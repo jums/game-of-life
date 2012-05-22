@@ -57,7 +57,7 @@ namespace Jums.GameOfLife.CoreC.Tests
             var expandedRows = rows.Select(r => FillMissing(r, width, '-'));
             int missingRows = height - rows.Count();
             string columnsFilled = string.Join("", expandedRows);
-            string final = FillMissing(columnsFilled, width * height, '-');
+            string final = FillMissing(columnsFilled, width * missingRows, '-');
             return final.Select(t => t == 'x').ToArray();
         }
 
