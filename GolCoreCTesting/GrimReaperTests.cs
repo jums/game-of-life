@@ -139,6 +139,95 @@ namespace Jums.GameOfLife.CoreC.Tests
             Assert.False(reaper.IsAlive(world, 1, 1));
         }
 
+        [Test]
+        public void IsAliveShouldBeTrueeWhenExactlyThreeAliveAndCurrentDead()
+        {
+            string data = @" x-x
+                             ---
+                             x-- ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.True(reaper.IsAlive(world, 1, 1));
+
+            data = @" xxx
+                      ---
+                      --- ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.True(reaper.IsAlive(world, 1, 1));
+
+            data = @" x--
+                      --x
+                      -x- ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.True(reaper.IsAlive(world, 1, 1));
+        }
+
+        [Test]
+        public void IsAliveShouldBeFalseWhenTwoOrOneAliveAndCurrentDead()
+        {
+            string data = @" x--
+                             ---
+                             x-- ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
+
+            data = @" ---
+                      --x
+                      --- ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
+        }
+
+        [Test]
+        public void IsAliveShouldBeFalseWhenFourOrMoreAliveAndCurrentDead()
+        {
+            string data = @" xxx
+                             ---
+                             x-- ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
+
+            data = @" x--
+                      --x
+                      -xx ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
+
+            data = @" x--
+                      x-x
+                      xx- ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
+
+            data = @" x-x
+                      x-x
+                      -xx ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
+
+            data = @" xxx
+                      x-x
+                      -xx ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
+
+            data = @" xxx
+                      x-x
+                      xxx ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
+        }
+
         private static IEnumerable<bool> ConvertToWorldData(string data, int width, int height)
         {
             Regex replacer = new Regex(@"[^\n-x]+");

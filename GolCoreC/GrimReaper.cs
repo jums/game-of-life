@@ -16,14 +16,12 @@ namespace Jums.GameOfLife.CoreC
             get
             {
                 return new List<Func<bool, int, World, bool?>> {
-                    Law1, Law2, Law3
+                    Law1, Law2, Law3, Law4
                 };
             }
         }
 
-        public GrimReaper() 
-        {
-        }
+        public GrimReaper() { }
 
         public bool IsAlive(World world, int x, int y)
         {
@@ -35,7 +33,7 @@ namespace Jums.GameOfLife.CoreC
             return ProcessRules(currentlyAlive, positions, world);
         }
 
-        private IEnumerable<Position> GetAdjacentPositions(int x, int y)
+        private static IEnumerable<Position> GetAdjacentPositions(int x, int y)
         {
             var modifiers = new[]{
                 new { x = -1, y = -1 },
@@ -114,6 +112,20 @@ namespace Jums.GameOfLife.CoreC
             return null;
         }
 
+        /// <summary>
+        /// 4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+        /// </summary>
+        /// <param name="currentAlive">Is it currently alive.</param>
+        /// <param name="adjacentAlive">Amount of adjacent life.</param>
+        /// <param name="world">The world.</param>
+        /// <returns>Should it be alive after evolution. Null means the rule does not apply.</returns>
+        private bool? Law4(bool currentAlive, int adjacentAlive, World world)
+        {
+            if (currentAlive) return null;
+            if (adjacentAlive == 3) return true;
+            return null;
+        }
+        
         private struct Position
         {
             public int X;
