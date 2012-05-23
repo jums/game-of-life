@@ -48,11 +48,94 @@ namespace Jums.GameOfLife.CoreC.Tests
             world.Import(ConvertToWorldData(data1, 10, 10));
             Assert.False(reaper.IsAlive(world, 1, 1));
 
-            string data2 = @" --x
+            string data2 = @" ---
+                              -x-
+                              -x- ";
+
+            world.Import(ConvertToWorldData(data2, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
+        }
+
+        [Test]
+        public void IsAliveShouldBeTrueWhenTwoAlive()
+        {
+            string data1 = @" -xx
                               -x-
                               --- ";
 
+            world.Import(ConvertToWorldData(data1, 10, 10));
+            Assert.True(reaper.IsAlive(world, 1, 1));
+
+            string data2 = @" x--
+                              -x-
+                              -x- ";
+
             world.Import(ConvertToWorldData(data2, 10, 10));
+            Assert.True(reaper.IsAlive(world, 1, 1));
+        }
+
+        [Test]
+        public void IsAliveShouldBeTrueWhenThreeAlive()
+        {
+            string data1 = @" xxx
+                              -x-
+                              --- ";
+
+            world.Import(ConvertToWorldData(data1, 10, 10));
+            Assert.True(reaper.IsAlive(world, 1, 1));
+
+            string data2 = @" x--
+                              -x-
+                              -xx ";
+
+            world.Import(ConvertToWorldData(data2, 10, 10));
+            Assert.True(reaper.IsAlive(world, 1, 1));
+        }
+
+
+        [Test]
+        public void IsAliveShouldBeFalseWhenFourOrMoreAlive()
+        {
+            string data = @" xxx
+                             -x-
+                             x-- ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
+
+            data = @" x--
+                      -xx
+                      -xx ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
+
+            data = @" x--
+                      xxx
+                      xx- ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
+
+            data = @" x-x
+                      xxx
+                      -xx ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
+
+            data = @" xxx
+                      xxx
+                      -xx ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
+
+            data = @" xxx
+                      xxx
+                      xxx ";
+
+            world.Import(ConvertToWorldData(data, 10, 10));
             Assert.False(reaper.IsAlive(world, 1, 1));
         }
 

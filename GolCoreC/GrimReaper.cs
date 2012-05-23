@@ -11,6 +11,16 @@ namespace Jums.GameOfLife.CoreC
     /// </summary>
     class GrimReaper
     {
+        private List<Func<bool, int, World, bool?>> Laws
+        {
+            get
+            {
+                return new List<Func<bool, int, World, bool?>> {
+                    Law1, Law2, Law3
+                };
+            }
+        }
+
         public GrimReaper() 
         {
         }
@@ -22,7 +32,7 @@ namespace Jums.GameOfLife.CoreC
             IEnumerable<Position> positions = GetAdjacentPositions(x, y);
             bool currentlyAlive = world.IsAlive(x, y);
 
-            return Law1(currentlyAlive, positions, world);
+            return ProcessRules(currentlyAlive, positions, world);
         }
 
         private IEnumerable<Position> GetAdjacentPositions(int x, int y)
@@ -48,17 +58,60 @@ namespace Jums.GameOfLife.CoreC
             }
         }
 
+        private bool ProcessRules(bool currentlyAlive, IEnumerable<Position> positions, World world)
+        {
+            int adjacentAlive = positions.Count(p => world.IsAlive(p.X, p.Y));
+            bool? result = null;
+
+            foreach (var law in Laws)
+            {
+                result = law(currentlyAlive, adjacentAlive, world);
+                if (result != null) break;
+            }
+
+            return result ?? false;
+        }
+
         /// <summary>
         /// 1. Any live cell with fewer than two live neighbours dies, as if caused by under-population.
         /// </summary>
-        /// <param name="currentlyAlive">Is it currently alive.</param>
-        /// <param name="adjacentPosition">The adjacent positions.</param>
+        /// <param name="currentAlive">Is it currently alive.</param>
+        /// <param name="adjacentAlive">Amount of adjacent life.</param>
         /// <param name="world">The world.</param>
-        /// <returns>Should it be alive after evolution.</returns>
-        private bool Law1(bool currentlyAlive, IEnumerable<Position> adjacentPosition, World world)
+        /// <returns>Should it be alive after evolution. Null means the rule does not apply.</returns>
+        private bool? Law1(bool currentAlive, int adjacentAlive, World world)
         {
-            if (!currentlyAlive) return false;
-            return adjacentPosition.Count(p => !world.IsAlive(p.X, p.Y)) < 2;
+            if (!currentAlive) return null;
+            if (adjacentAlive < 2) return false;
+            return null;
+        }
+
+        /// <summary>
+        /// 2. Any live cell with two or three live neighbours lives on to the next generation.
+        /// </summary>
+        /// <param name="currentAlive">Is it currently alive.</param>
+        /// <param name="adjacentAlive">Amount of adjacent life.</param>
+        /// <param name="world">The world.</param>
+        /// <returns>Should it be alive after evolution. Null means the rule does not apply.</returns>
+        private bool? Law2(bool currentAlive, int adjacentAlive, World world)
+        {
+            if (!currentAlive) return null;
+            if (adjacentAlive == 2 || adjacentAlive == 3) return true;
+            return null;
+        }
+
+        /// <summary>
+        /// 3. Any live cell with more than three live neighbours dies, as if by overcrowding.
+        /// </summary>
+        /// <param name="currentAlive">Is it currently alive.</param>
+        /// <param name="adjacentAlive">Amount of adjacent life.</param>
+        /// <param name="world">The world.</param>
+        /// <returns>Should it be alive after evolution. Null means the rule does not apply.</returns>
+        private bool? Law3(bool currentAlive, int adjacentAlive, World world)
+        {
+            if (!currentAlive) return null;
+            if (adjacentAlive > 3) return false;
+            return null;
         }
 
         private struct Position
