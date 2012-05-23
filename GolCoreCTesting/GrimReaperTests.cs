@@ -33,39 +33,46 @@ namespace Jums.GameOfLife.CoreC.Tests
             string data = @" ---
                              -x-
                              --- ";
-            
+
             world.Import(ConvertToWorldData(data, 10, 10));
-            bool value = reaper.IsAlive(world, 1, 1);
+            Assert.False(reaper.IsAlive(world, 1, 1));
         }
 
         [Test]
         public void IsAliveShouldBeFalseWhenOneAlive()
         {
-            string data = @" --x
-                             -x-
-                             --- ";
+            string data1 = @" --x
+                              -x-
+                              --- ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            bool value = reaper.IsAlive(world, 1, 1);
+            world.Import(ConvertToWorldData(data1, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
+
+            string data2 = @" --x
+                              -x-
+                              --- ";
+
+            world.Import(ConvertToWorldData(data2, 10, 10));
+            Assert.False(reaper.IsAlive(world, 1, 1));
         }
 
         private static IEnumerable<bool> ConvertToWorldData(string data, int width, int height)
         {
-            Regex replacer = new Regex(@"[^\n-x]");
+            Regex replacer = new Regex(@"[^\n-x]+");
             string trimmed = replacer.Replace(data, "");
             string[] rows = trimmed.Split('\n');
-            var expandedRows = rows.Select(r => FillMissing(r, width, '-'));
-            int missingRows = height - rows.Count();
+            var expandedRows = rows.Select(r => FillMissing(r, width, '-')).ToList();
             string columnsFilled = string.Join("", expandedRows);
-            string final = FillMissing(columnsFilled, width * missingRows, '-');
+            string final = FillMissing(columnsFilled, width * height, '-');
             return final.Select(t => t == 'x').ToArray();
         }
 
         private static string FillMissing(string original, int length, char character)
         {
+            original = original.Trim();
             int missingChars = length - original.Length;
             if (missingChars == 0) return original;
-            string addition = string.Join("", Enumerable.Repeat(character, missingChars));
+            string addition = string.Join("", Enumerable.Repeat(character.ToString(), missingChars));
             return original + addition;
         }
     }

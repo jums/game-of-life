@@ -113,7 +113,7 @@ namespace Jums.GameOfLife.CoreC
         public void Import(IEnumerable<bool> data)
         {
             if (data == null) throw new ArgumentNullException("data");
-            if (data.Count() != lifeStates.Count) throw new ArgumentException("data", "data was bad length");
+            if (data.Count() != lifeStates.Count) throw new ArgumentException("data", "data was bad length, " + data.Count());
 
             bool[] dataArray = data.ToArray();
 
