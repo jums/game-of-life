@@ -13,7 +13,7 @@ namespace Jums.GameOfLife.CoreC
         public God(World initialWorld, GrimReaper grimReaper)
         {
             this.WorldNow = initialWorld;
-            //this.WorldTomorrow = initialWorld.Copy();
+            this.WorldTomorrow = initialWorld.Copy();
             this.GrimReaper = grimReaper;
         }
 

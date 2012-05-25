@@ -122,5 +122,18 @@ namespace Jums.GameOfLife.CoreC
                 lifeStates[i] = dataArray[i];
             }
         }
+
+        /// <summary>
+        /// Makes a copy of this object.
+        /// </summary>
+        /// <returns></returns>
+        public World Copy()
+        {
+            return new World(this.Width, this.Height)
+            {
+                lifeStates = this.lifeStates.ToList(),
+                FillRate = this.FillRate
+            };
+        }
     }
 }

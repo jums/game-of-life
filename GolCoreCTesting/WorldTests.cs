@@ -206,6 +206,25 @@ namespace Jums.GameOfLife.CoreC.Tests
             CollectionAssert.AreEqual(randomData, simpleWorld.Positions);
         }
 
+        [Test]
+        public void CopyShouldHaveSameLifeStatesAndDimensions()
+        {
+            simpleWorld.FillRate = 26;
+            simpleWorld.CreateLife();
+            World another = simpleWorld.Copy();
+            Assert.AreEqual(simpleWorld.Width, another.Width);
+            Assert.AreEqual(simpleWorld.Height, another.Height);
+            Assert.AreEqual(simpleWorld.FillRate, another.FillRate);
+            CollectionAssert.AreEqual(simpleWorld.Positions, another.Positions);
+        }
+
+        [Test]
+        public void CopyShouldNotBeSameObject()
+        {
+            World another = simpleWorld.Copy();
+            Assert.AreNotSame(simpleWorld, another);
+        }
+
         private List<Point> GetLifeCoordinates(World world)
         {
             var coordinates = GetAllCoordinates(world);
