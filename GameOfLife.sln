@@ -1,9 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GolCoreC", "GolCoreC\GolCoreC.csproj", "{84466182-DC36-47FE-AEF4-6E2E78DD5F19}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreCSharp", "CoreCSharp\CoreCSharp.csproj", "{84466182-DC36-47FE-AEF4-6E2E78DD5F19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GolCoreCTesting", "GolCoreCTesting\GolCoreCTesting.csproj", "{07D0EE90-53EE-45FA-B247-E1BE9E259A6E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreCSharpTests", "CoreCSharpTests\CoreCSharpTests.csproj", "{07D0EE90-53EE-45FA-B247-E1BE9E259A6E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{584B6975-6C15-4201-AB45-7B7DA47D6652}"
 	ProjectSection(SolutionItems) = preProject

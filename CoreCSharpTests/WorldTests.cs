@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 
-namespace Jums.GameOfLife.CoreC.Tests
+namespace Jums.GameOfLife.CoreCSharp.Tests
 {
     [TestFixture]
     public class WorldTests

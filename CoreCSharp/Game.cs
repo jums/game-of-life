@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Jums.GameOfLife.CoreC
+namespace Jums.GameOfLife.CoreCSharp
 {
     /// <summary>
     /// The game engine of the game of life.
@@ -39,7 +39,7 @@ namespace Jums.GameOfLife.CoreC
         /// Initiates the world and fills it with life that will evolve 
         /// tick-by-tick until <c>MaxTics</c> is reached.
         /// </summary>
-        public void CreateLife() 
+        public void Start() 
         {
             
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Jums.GameOfLife.CoreC
+namespace Jums.GameOfLife.CoreCSharp
 {
     /// <summary>
     /// Master of life and death. He giveth, and taketh away life according to 

@@ -5,7 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using System.Text.RegularExpressions;
 
-namespace Jums.GameOfLife.CoreC.Tests
+namespace Jums.GameOfLife.CoreCSharp.Tests
 {
     [TestFixture]
     class GrimReaperTests

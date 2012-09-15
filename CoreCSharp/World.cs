@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.CompilerServices;
 
-namespace Jums.GameOfLife.CoreC
+namespace Jums.GameOfLife.CoreCSharp
 {
     /// <summary>
     /// The world is a grid of positions that are dead or alive. 

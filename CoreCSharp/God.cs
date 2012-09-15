@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Jums.GameOfLife.CoreC
+namespace Jums.GameOfLife.CoreCSharp
 {
     /// <summary>
     /// Manages a world in all points of time in every way. Grim reaper works for god.
