@@ -12,7 +12,13 @@ namespace Jums.GameOfLife.CoreCSharp
     {
         //private GrimReaper grimReaper;
 
-        public Game() {}
+        public Game()
+        {
+            this.MaxTicks = 100;
+            this.InitialWorldWidth = 360;
+            this.InitialWorldHeight = 240;
+            this.Seed = DateTime.Now.Ticks;
+        }
 
         /// <summary>
         /// Maximum number of "ticks", rounds, years, units of time.
