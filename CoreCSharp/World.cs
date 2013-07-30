@@ -147,14 +147,14 @@ namespace Jums.GameOfLife.CoreCSharp
         /// <returns></returns>
         public IEnumerable<Position> GetPositions()
         {
-            for (int i = 0; i < Width; i++)
+            for (int y = 0; y < Height; y++)
             {
-                for (int j = 0; j < Height; j++)
+                for (int x = 0; x < Width; x++)
                 {
                     yield return new Position
                     {
-                        X = i,
-                        Y = j
+                        X = x,
+                        Y = y
                     };
                 }
             }
