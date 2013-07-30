@@ -1,14 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreCSharp", "CoreCSharp\CoreCSharp.csproj", "{84466182-DC36-47FE-AEF4-6E2E78DD5F19}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreCSharpTests", "CoreCSharpTests\CoreCSharpTests.csproj", "{07D0EE90-53EE-45FA-B247-E1BE9E259A6E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{584B6975-6C15-4201-AB45-7B7DA47D6652}"
 	ProjectSection(SolutionItems) = preProject
 		todo.txt = todo.txt
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreCSharp", "CoreCSharp\CoreCSharp.csproj", "{84466182-DC36-47FE-AEF4-6E2E78DD5F19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreCSharpTests", "CoreCSharpTests\CoreCSharpTests.csproj", "{07D0EE90-53EE-45FA-B247-E1BE9E259A6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOfLife", "GameOfLife\GameOfLife.csproj", "{ed35348c-bfba-4a24-82f4-7864a8d037e2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,14 +18,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{84466182-DC36-47FE-AEF4-6E2E78DD5F19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84466182-DC36-47FE-AEF4-6E2E78DD5F19}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{84466182-DC36-47FE-AEF4-6E2E78DD5F19}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{84466182-DC36-47FE-AEF4-6E2E78DD5F19}.Release|Any CPU.Build.0 = Release|Any CPU
 		{07D0EE90-53EE-45FA-B247-E1BE9E259A6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{07D0EE90-53EE-45FA-B247-E1BE9E259A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07D0EE90-53EE-45FA-B247-E1BE9E259A6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07D0EE90-53EE-45FA-B247-E1BE9E259A6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84466182-DC36-47FE-AEF4-6E2E78DD5F19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84466182-DC36-47FE-AEF4-6E2E78DD5F19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84466182-DC36-47FE-AEF4-6E2E78DD5F19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84466182-DC36-47FE-AEF4-6E2E78DD5F19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED35348C-BFBA-4A24-82F4-7864A8D037E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED35348C-BFBA-4A24-82F4-7864A8D037E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED35348C-BFBA-4A24-82F4-7864A8D037E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED35348C-BFBA-4A24-82F4-7864A8D037E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

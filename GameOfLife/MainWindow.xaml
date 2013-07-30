@@ -1,0 +1,15 @@
+﻿<Window x:Class="GameOfLife.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Game of Life" Height="310" Width="640">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="480"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Path Grid.Column="1" Data="M480,0 L480,320" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="321" Margin="0,0,0,-1" Stretch="Fill" Stroke="Black" VerticalAlignment="Top" Width="1"/>
+        <Button x:Name="Reset" Content="New Game" Grid.Column="1" HorizontalAlignment="Center" Height="25" Margin="10,10,0,0" VerticalAlignment="Top" Width="125" Click="Reset_Click"/>
+        <Button x:Name="Next" Content="Next" Grid.Column="1" HorizontalAlignment="Center" Height="25" Margin="11,40,1,0" VerticalAlignment="Top" Width="124" Click="Next_Click"/>
+        <Canvas Name="WorldCanvas" HorizontalAlignment="Left" VerticalAlignment="Top" Width="480" Height="280" Grid.Column="0" />
+    </Grid>
+</Window>
