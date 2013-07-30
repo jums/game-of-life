@@ -10,14 +10,19 @@ namespace Jums.GameOfLife.CoreCSharp
     /// </summary>
     public class Game
     {
-        //private GrimReaper grimReaper;
+        private World World { get; set; }
+        //private World WorldTomorrow { get; set; }
+        private MotherNature MotherNature { get; set; }
 
         public Game()
         {
-            this.MaxTicks = 100;
-            this.InitialWorldWidth = 360;
-            this.InitialWorldHeight = 240;
-            this.Seed = DateTime.Now.Ticks;
+            MaxTicks = 100;
+            InitialWorldWidth = 160;
+            InitialWorldHeight = 90;
+            Seed = DateTime.Now.Ticks;
+
+            MotherNature = new MotherNature();
+            World = new World(InitialWorldWidth, InitialWorldHeight);
         }
 
         /// <summary>
@@ -36,6 +41,16 @@ namespace Jums.GameOfLife.CoreCSharp
         /// </summary>
         public int InitialWorldHeight { get; set; }
 
+        public int Width
+        {
+            get { return World.Width; }
+        }
+
+        public int Height
+        {
+            get { return World.Height; }
+        }
+
         /// <summary>
         /// Seed number for the randomization of the initial life.
         /// </summary>
@@ -47,7 +62,25 @@ namespace Jums.GameOfLife.CoreCSharp
         /// </summary>
         public void Start() 
         {
-            
+            // TODO
+        }
+
+        /// <summary>
+        /// Goes one time unit forward and evolves the world.
+        /// </summary>
+        public void Next()
+        {
+            // TODO
+        }
+
+        public bool[,] State
+        {
+            get { return World.ToArrays(); }
+        }
+
+        public void Reset()
+        {
+            World.CreateLife();
         }
     }
 }

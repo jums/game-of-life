@@ -10,13 +10,13 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
     [TestFixture]
     class GrimReaperTests
     {
-        GrimReaper reaper;
+        MotherNature reaper;
         World world;
 
         [TestFixtureSetUp]
         public void SetUp()
         {
-            this.reaper = new GrimReaper();
+            this.reaper = new MotherNature();
             this.world = new World(10, 10);
         }
 

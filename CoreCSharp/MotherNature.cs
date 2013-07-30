@@ -6,10 +6,10 @@ using System.Text;
 namespace Jums.GameOfLife.CoreCSharp
 {
     /// <summary>
-    /// Master of life and death. He giveth, and taketh away life according to 
+    /// Master of life and death. She giveth, and taketh away life according to 
     /// the rules of the game of life.
     /// </summary>
-    class GrimReaper
+    class MotherNature
     {
         private List<Func<bool, int, World, bool?>> Laws
         {
@@ -21,39 +21,16 @@ namespace Jums.GameOfLife.CoreCSharp
             }
         }
 
-        public GrimReaper() { }
+        public MotherNature() { }
 
         public bool IsAlive(World world, int x, int y)
         {
             if (world == null) throw new ArgumentNullException("world");
 
-            IEnumerable<Position> positions = GetAdjacentPositions(x, y);
+            IEnumerable<Position> positions = World.GetAdjacentPositions(x, y);
             bool currentlyAlive = world.IsAlive(x, y);
 
             return ProcessRules(currentlyAlive, positions, world);
-        }
-
-        private static IEnumerable<Position> GetAdjacentPositions(int x, int y)
-        {
-            var modifiers = new[]{
-                new { x = -1, y = -1 },
-                new { x = -1, y = 0 },
-                new { x = -1, y = 1 },
-                new { x = 1, y = -1 },
-                new { x = 1, y = 0 },
-                new { x = 1, y = 1 },
-                new { x = 0, y = -1 },
-                new { x = 0, y = 1 }
-            };
-
-            foreach (var modifier in modifiers)
-            {
-                yield return new Position { 
-                    X = x + modifier.x,
-                    Y = y + modifier.y,
-                };
-
-            }
         }
 
         private bool ProcessRules(bool currentlyAlive, IEnumerable<Position> positions, World world)
@@ -125,12 +102,5 @@ namespace Jums.GameOfLife.CoreCSharp
             if (adjacentAlive == 3) return true;
             return null;
         }
-        
-        private struct Position
-        {
-            public int X;
-            public int Y;
-        }
-
     }
 }

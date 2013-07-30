@@ -14,7 +14,7 @@ namespace Jums.GameOfLife.CoreCSharp
     class World
     {
         public const int MinimumSize = 10;
-        private int fillRate = 50;
+        private int fillRate = 10;
         private IList<bool> lifeStates;
 
         public World(int width, int height)
@@ -95,7 +95,7 @@ namespace Jums.GameOfLife.CoreCSharp
             life.AddRange(Enumerable.Repeat(true, lifeAmount));
             life.AddRange(Enumerable.Repeat(false, positions - lifeAmount));
 
-            int seed = (int)(DateTime.Now.Ticks % int.MaxValue + this.GetHashCode());
+            int seed = (int)(DateTime.Now.Ticks % Int32.MaxValue + this.GetHashCode());
             Random random = new Random(seed); // TODO: Take seed from property
 
             for (int i = 0; i < positions; i++) // loop through actual positions
@@ -134,6 +134,44 @@ namespace Jums.GameOfLife.CoreCSharp
                 lifeStates = this.lifeStates.ToList(),
                 FillRate = this.FillRate
             };
+        }
+
+        public bool[,] ToArrays()
+        {
+            bool[,] state = new bool[this.Width,this.Height];
+            
+            for (int i = 0; i < this.Width; i++)
+            {
+                for (int j = 0; j < this.Height; j++)
+                {
+                    state[i, j] = IsAlive(i, j);
+                }
+            }
+
+            return state;
+        }
+
+        public static IEnumerable<Position> GetAdjacentPositions(int x, int y)
+        {
+            var modifiers = new[]{
+                new { x = -1, y = -1 },
+                new { x = -1, y = 0 },
+                new { x = -1, y = 1 },
+                new { x = 1, y = -1 },
+                new { x = 1, y = 0 },
+                new { x = 1, y = 1 },
+                new { x = 0, y = -1 },
+                new { x = 0, y = 1 }
+            };
+
+            foreach (var modifier in modifiers)
+            {
+                yield return new Position { 
+                    X = x + modifier.x,
+                    Y = y + modifier.y,
+                };
+
+            }
         }
     }
 }
