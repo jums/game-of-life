@@ -19,8 +19,6 @@ namespace Jums.GameOfLife.CoreCSharp
             MaxTicks = 100;
             InitialWorldWidth = 160;
             InitialWorldHeight = 90;
-            Seed = DateTime.Now.Ticks;
-
             MotherNature = new MotherNature();
             World = new World(InitialWorldWidth, InitialWorldHeight);
         }
@@ -54,13 +52,13 @@ namespace Jums.GameOfLife.CoreCSharp
         /// <summary>
         /// Seed number for the randomization of the initial life.
         /// </summary>
-        public long Seed { get; set; }
+        public int? Seed { get; set; }
 
         /// <summary>
         /// Initiates the world and fills it with life that will evolve 
         /// tick-by-tick until <c>MaxTics</c> is reached.
         /// </summary>
-        public void Start() 
+        public void Start()
         {
             // TODO
         }
@@ -70,7 +68,7 @@ namespace Jums.GameOfLife.CoreCSharp
         /// </summary>
         public void Next()
         {
-            // TODO
+            World = MotherNature.Evolve(World);
         }
 
         public bool[,] State
@@ -80,7 +78,7 @@ namespace Jums.GameOfLife.CoreCSharp
 
         public void Reset()
         {
-            World.CreateLife();
+            World.CreateLife(Seed);
         }
     }
 }

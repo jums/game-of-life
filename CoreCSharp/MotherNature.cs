@@ -23,19 +23,28 @@ namespace Jums.GameOfLife.CoreCSharp
 
         public MotherNature() { }
 
+        public World Evolve(World world)
+        {
+            var evolution = world.Copy();
+            var positions = world.GetPositions();
+            var newStates = positions.Select(p => IsAlive(world, p.X, p.Y));
+            evolution.Import(newStates);
+            return evolution;
+        }
+
         public bool IsAlive(World world, int x, int y)
         {
             if (world == null) throw new ArgumentNullException("world");
 
-            IEnumerable<Position> positions = World.GetAdjacentPositions(x, y);
+            IEnumerable<Position> positions = world.GetAdjacentPositions(x, y);
             bool currentlyAlive = world.IsAlive(x, y);
 
             return ProcessRules(currentlyAlive, positions, world);
         }
 
-        private bool ProcessRules(bool currentlyAlive, IEnumerable<Position> positions, World world)
+        private bool ProcessRules(bool currentlyAlive, IEnumerable<Position> adjacentPositions, World world)
         {
-            int adjacentAlive = positions.Count(p => world.IsAlive(p.X, p.Y));
+            int adjacentAlive = adjacentPositions.Count(p => world.IsAlive(p.X, p.Y));
             bool? result = null;
 
             foreach (var law in Laws)
