@@ -53,7 +53,7 @@ namespace Jums.GameOfLife.CoreCSharp
         }
 
         /// <summary>
-        /// Determines whether specified coordinates contain life.
+        /// Determines whether specified coordinates contain life. Coordinates outside the world are always dead.
         /// </summary>
         /// <param name="x">The x coordinate.</param>
         /// <param name="y">The y coordinate.</param>
@@ -62,10 +62,8 @@ namespace Jums.GameOfLife.CoreCSharp
         /// </returns>
         public bool IsAlive(int x, int y)
         {
-            if (x > Width - 1) throw new IndexOutOfRangeException("x was beyond the world, positive.");
-            if (y > Height - 1) throw new IndexOutOfRangeException("y was beyond the world, positive.");
-            if (x < 0) throw new IndexOutOfRangeException("x was beyond the world, negative.");
-            if (y < 0) throw new IndexOutOfRangeException("y was beyond the world, negative.");
+            if (x < 0 || y < 0) return false;
+            if (x >= Width || y >= Height) return false;
 
             int index = GetPositionIndex(x, y);
             return lifeStates[index];
@@ -130,21 +128,23 @@ namespace Jums.GameOfLife.CoreCSharp
             };
         }
 
-        public bool[,] ToArrays()
+        public bool[,] To2DArray()
         {
             bool[,] state = new bool[Width,Height];
+            var positions = GetPositions();
 
-            for (int i = 0; i < Width; i++)
+            foreach (var p in positions)
             {
-                for (int j = 0; j < Height; j++)
-                {
-                    state[i, j] = IsAlive(i, j);
-                }
+                state[p.X, p.Y] = IsAlive(p.X, p.Y);
             }
 
             return state;
         }
 
+        /// <summary>
+        /// Gets all positions coordinates of the world.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Position> GetPositions()
         {
             for (int i = 0; i < Width; i++)
@@ -160,6 +160,12 @@ namespace Jums.GameOfLife.CoreCSharp
             }
         }
 
+        /// <summary>
+        /// Gets the adjacent positions to given coordinates in the world.
+        /// </summary>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        /// <returns></returns>
         public IEnumerable<Position> GetAdjacentPositions(int x, int y)
         {
             var modifiers = new[]
@@ -174,14 +180,11 @@ namespace Jums.GameOfLife.CoreCSharp
                 new {x = 0, y = 1}
             };
 
-            foreach (var modifier in modifiers)
+            return modifiers.Select(modifier => new Position
             {
-                yield return new Position
-                {
-                    X = x + modifier.x,
-                    Y = y + modifier.y,
-                };
-            }
+                X = x + modifier.x,
+                Y = y + modifier.y,
+            });
         }
     }
 }

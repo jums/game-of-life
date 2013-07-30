@@ -11,7 +11,6 @@ namespace Jums.GameOfLife.CoreCSharp
     public class Game
     {
         private World World { get; set; }
-        //private World WorldTomorrow { get; set; }
         private MotherNature MotherNature { get; set; }
 
         public Game()
@@ -73,7 +72,7 @@ namespace Jums.GameOfLife.CoreCSharp
 
         public bool[,] State
         {
-            get { return World.ToArrays(); }
+            get { return World.To2DArray(); }
         }
 
         public void Reset()
