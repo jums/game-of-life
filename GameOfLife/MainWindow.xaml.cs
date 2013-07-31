@@ -27,7 +27,7 @@ namespace GameOfLife
 
         public MainWindow()
         {
-            Game = new Game();
+            Game = new Game {InitialWorldHeight = 90, InitialWorldWidth = 160};
             InitializeComponent();
         }
 
@@ -36,10 +36,10 @@ namespace GameOfLife
             InitiateGameView();
             base.OnInitialized(e);
         }
-		
-		protected override void OnRender(DrawingContext drawingContext)
-		{
-		}
+
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+        }
 
         private void InitiateGameView()
         {
@@ -47,11 +47,11 @@ namespace GameOfLife
 
             for (int i = 0; i < Game.Width; i++)
             {
-                int x = i * SquareSize;
+                int x = i*SquareSize;
 
                 for (int j = 0; j < Game.Height; j++)
                 {
-                    int y = j * SquareSize;
+                    int y = j*SquareSize;
                     var rectangle = AddRectangleToView(x, y);
                     StoreRectangleToLookup(i, j, rectangle);
                 }
@@ -82,12 +82,12 @@ namespace GameOfLife
         {
             var state = Game.State;
 
-            for (int i = 0; i < Game.Width; i++)
+            for (int x = 0; x < Game.Width; x++)
             {
-                for (int j = 0; j < Game.Height; j++)
+                for (int y = 0; y < Game.Height; y++)
                 {
-                    Rectangle rectangle = GetRectangle(i, j);
-                    Brush color = state[i, j] ? Brushes.GreenYellow : WorldCanvas.Background;
+                    Rectangle rectangle = GetRectangle(x, y);
+                    Brush color = state[x, y] ? Brushes.GreenYellow : WorldCanvas.Background;
                     rectangle.Fill = color;
                 }
             }
