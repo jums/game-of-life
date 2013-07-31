@@ -41,6 +41,8 @@ namespace GameOfLife
 
         protected override void OnRender(DrawingContext drawingContext)
         {
+            WorldCanvas.Width = Game.Width * SquareSize;
+            WorldCanvas.Height = Game.Height * SquareSize;
         }
 
         private void Create_Click(object sender, RoutedEventArgs e)

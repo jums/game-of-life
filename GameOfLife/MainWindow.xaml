@@ -1,9 +1,9 @@
 ﻿<Window x:Class="GameOfLife.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Game of Life" Height="Auto" Width="Auto" SizeToContent="WidthAndHeight">
+        Title="Game of Life" Height="Auto" Width="Auto" SizeToContent="WidthAndHeight" ResizeMode="NoResize" Icon="logo.png">
     <StackPanel Orientation="Horizontal">
-        <Canvas Name="WorldCanvas" HorizontalAlignment="Left" VerticalAlignment="Top" Width="480" Height="280" />
+        <Canvas Name="WorldCanvas" HorizontalAlignment="Left" VerticalAlignment="Top" Width="480" Height="Auto" />
         <Separator Height="1">
             <Separator.LayoutTransform>
                 <RotateTransform Angle="90" />
