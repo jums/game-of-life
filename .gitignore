@@ -7,5 +7,6 @@ TestResults
 
 # local solution file
 *.suo
+*.user
 
 _ReSharper*
