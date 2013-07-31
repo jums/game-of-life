@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Jums.GameOfLife.CoreCSharp;
 
 namespace GameOfLife
@@ -25,6 +26,7 @@ namespace GameOfLife
         protected Game Game { get; set; }
         private Dictionary<string, Rectangle> rectangles;
         private int? lastSeed;
+        private Player player;
 
         public MainWindow()
         {
@@ -69,6 +71,20 @@ namespace GameOfLife
         {
             Game.Next();
             DrawGame();
+        }
+
+        private void Play_Click(object sender, RoutedEventArgs e)
+        {
+            player = new Player(Dispatcher, DrawGame, Game.Next);
+            player.Play(100);
+        }
+
+        private void Stop_Click(object sender, RoutedEventArgs e)
+        {
+            if (player != null)
+            {
+                player.Stop();
+            }
         }
 
         private Settings GetSettings(bool? wrapped = null)
