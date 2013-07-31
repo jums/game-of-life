@@ -33,14 +33,14 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
         [ExpectedException("System.ArgumentOutOfRangeException")]
         public void CreateIrrationalWorldX()
         {
-            World world = new World(World.MinimumSize - 1, 10);
+            new World(World.MinimumSize - 1, 10);
         }
 
         [Test]
         [ExpectedException("System.ArgumentOutOfRangeException")]
         public void CreateIrrationalWorldY()
         {
-            World world = new World(10, -1);
+            new World(10, -1);
         }
 
         [Test]
@@ -48,7 +48,7 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
         public void CoordinateOverLimitX()
         {
             World world = new World(10, 10);
-            bool alive = world.IsAlive(9, 10);
+            world.IsAlive(9, 10);
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
         public void CoordinateBelowLimitX()
         {
             World world = new World(10, 10);
-            bool alive = world.IsAlive(-1, 0);
+            world.IsAlive(-1, 0);
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
         public void CoordinateOverLimitY()
         {
             World world = new World(10, 10);
-            bool alive = world.IsAlive(0, 10);
+            world.IsAlive(0, 10);
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
         public void CoordinateBelowLimitY()
         {
             World world = new World(10, 10);
-            bool alive = world.IsAlive(5, -1);
+            world.IsAlive(5, -1);
         }
 
         [Test]
@@ -223,6 +223,90 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
         {
             World another = simpleWorld.Copy();
             Assert.AreNotSame(simpleWorld, another);
+        }
+
+        [Test]
+        public void RegularAdjacentPositions()
+        {
+            var positions = simpleWorld.GetAdjacentPositions(5, 5);
+
+            var expected = new[]
+            {
+                new {x = 4, y = 4},
+                new {x = 5, y = 4},
+                new {x = 6, y = 4},
+                new {x = 4, y = 6},
+                new {x = 5, y = 6},
+                new {x = 6, y = 6},
+                new {x = 4, y = 5},
+                new {x = 6, y = 5}
+            };
+
+            Assert.True(expected.All(p => positions.Any(pp => pp.X == p.x && pp.Y == p.y)));
+        }
+
+        [Test]
+        public void NonWrappedAdjacentPositionsAtCorner()
+        {
+            var positions = simpleWorld.GetAdjacentPositions(0, 0);
+
+            var expected = new[]
+            {
+                new {x = -1, y = -1},
+                new {x = 0, y = -1},
+                new {x = 1, y = -1},
+                new {x = -1, y = 1},
+                new {x = 0, y = 1},
+                new {x = 1, y = 1},
+                new {x = -1, y = 0},
+                new {x = 1, y = 0}
+            };
+
+            Assert.True(expected.All(p => positions.Any(pp => pp.X == p.x && pp.Y == p.y)));
+        }
+
+        [Test]
+        public void WrappedAdjacentPositionsAtCorner()
+        {
+            var world = new World(20, 10, true);
+            var positions = world.GetAdjacentPositions(0, 0);
+
+            var expected = new[]
+            {
+                new {x = 19, y = 9},
+                new {x = 0, y = 9},
+                new {x = 1, y = 9},
+                new {x = 19, y = 1},
+                new {x = 0, y = 1},
+                new {x = 1, y = 1},
+                new {x = 19, y = 0},
+                new {x = 1, y = 0}
+            };
+
+            string poss = string.Join(" | ", positions.Select(p => p.ToString()));
+
+            Assert.True(expected.All(p => positions.Any(pp => pp.X == p.x && pp.Y == p.y)), poss);
+        }
+
+        [Test]
+        public void WrappedAdjacentPositionsAtAnotherCorner()
+        {
+            var world = new World(20, 10, true);
+            var positions = world.GetAdjacentPositions(19, 0);
+
+            var expected = new[]
+            {
+                new {x = 18, y = 9},
+                new {x = 19, y = 9},
+                new {x = 0, y = 9},
+                new {x = 18, y = 1},
+                new {x = 19, y = 1},
+                new {x = 0, y = 1},
+                new {x = 18, y = 0},
+                new {x = 0, y = 0}
+            };
+
+            Assert.True(expected.All(p => positions.Any(pp => pp.X == p.x && pp.Y == p.y)));
         }
 
         private List<Point> GetLifeCoordinates(World world)

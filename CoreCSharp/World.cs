@@ -188,11 +188,39 @@ namespace Jums.GameOfLife.CoreCSharp
                 new {x = 0, y = 1}
             };
 
-            return modifiers.Select(modifier => new Position
+            var positions =  modifiers.Select(modifier => new Position
             {
                 X = x + modifier.x,
                 Y = y + modifier.y,
             });
+
+            if (Wrapped)
+            {
+                positions = Wrap(positions);
+            }
+
+            return positions;
+        }
+
+        private IEnumerable<Position> Wrap(IEnumerable<Position> positions)
+        {
+            return positions.Select(Wrap);
+        }
+
+        private Position Wrap(Position position)
+        {
+            return new Position
+            {
+                X = WrapDimension(position.X, Width),
+                Y = WrapDimension(position.Y, Height)
+            };
+        }
+
+        private int WrapDimension(int x, int max)
+        {
+            if (x < 0) return max + x;
+            if (x >= max) return x - max;
+            return x;
         }
     }
 }
