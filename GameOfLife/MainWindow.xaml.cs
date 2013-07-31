@@ -75,8 +75,8 @@ namespace GameOfLife
 
         private void Play_Click(object sender, RoutedEventArgs e)
         {
-            player = new Player(Dispatcher, DrawGame, Game.Next);
-            player.Play(100);
+            player = new Player(DrawGame, Game.Next);
+            player.Play(TimeSpan.FromMilliseconds(100));
         }
 
         private void Stop_Click(object sender, RoutedEventArgs e)

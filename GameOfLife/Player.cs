@@ -7,34 +7,30 @@ namespace GameOfLife
     class Player
     {
         private readonly object evolveLock = new object();
-        private readonly Timer timer = new Timer();
         private readonly Action draw;
         private readonly Action evolve;
-        private readonly Dispatcher dispatcher;
+        readonly DispatcherTimer timer = new DispatcherTimer();
 
-        public Player(Dispatcher dispatcher, Action draw, Action evolve)
+        public Player(Action draw, Action evolve)
         {
-            this.dispatcher = dispatcher;
             this.draw = draw;
             this.evolve = evolve;
         }
 
-        public void Play(int interval)
+        public void Play(TimeSpan interval)
         {
             timer.Interval = interval;
-            timer.Elapsed += (sender, args) =>
+            timer.Tick += (sender, args) =>
                 {
-                    timer.Stop();
                     InvokeEvolve();
                     InvokeDraw();
-                    timer.Start();
                 };
             timer.Start();
         }
 
         private void InvokeDraw()
         {
-            dispatcher.Invoke(draw);
+            draw();
         }
 
         private void InvokeEvolve()
