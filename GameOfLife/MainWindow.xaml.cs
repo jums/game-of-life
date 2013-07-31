@@ -38,17 +38,18 @@ namespace GameOfLife
         protected override void OnInitialized(EventArgs e)
         {
             InitiateGameView();
+            WorldCanvas.Width = Game.Width * SquareSize;
+            WorldCanvas.Height = Game.Height * SquareSize;
             base.OnInitialized(e);
         }
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            WorldCanvas.Width = Game.Width * SquareSize;
-            WorldCanvas.Height = Game.Height * SquareSize;
         }
 
         private void Create_Click(object sender, RoutedEventArgs e)
         {
+            StopPlaying();
             Settings settings = GetSettings();
             Game = new Game(settings);
             lastSeed = Game.Populate();
@@ -57,12 +58,14 @@ namespace GameOfLife
 
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
+            StopPlaying();
             lastSeed = Game.Populate(lastSeed);
             DrawGame();
         }
 
         private void Populate_Click(object sender, RoutedEventArgs e)
         {
+            StopPlaying();
             lastSeed = Game.Populate();
             DrawGame();
         }
@@ -73,13 +76,29 @@ namespace GameOfLife
             DrawGame();
         }
 
-        private void Play_Click(object sender, RoutedEventArgs e)
+        private void PlaySlow_Click(object sender, RoutedEventArgs e)
         {
-            player = new Player(DrawGame, Game.Next);
-            player.Play(TimeSpan.FromMilliseconds(100));
+            StartPlaying(TimeSpan.FromMilliseconds(400));
+        }
+
+        private void PlayFast_Click(object sender, RoutedEventArgs e)
+        {
+            StartPlaying(TimeSpan.FromMilliseconds(100));
         }
 
         private void Stop_Click(object sender, RoutedEventArgs e)
+        {
+            StopPlaying();
+        }
+
+        private void StartPlaying(TimeSpan interval)
+        {
+            StopPlaying();
+            player = new Player(DrawGame, Game.Next);
+            player.Play(interval);
+        }
+
+        private void StopPlaying()
         {
             if (player != null)
             {
