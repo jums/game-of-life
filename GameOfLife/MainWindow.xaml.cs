@@ -49,6 +49,8 @@ namespace GameOfLife
         {
             Settings settings = GetSettings();
             Game = new Game(settings);
+            lastSeed = Game.Populate();
+            DrawGame();
         }
 
         private void Reset_Click(object sender, RoutedEventArgs e)
@@ -73,8 +75,8 @@ namespace GameOfLife
         {
             return new Settings
             {
-                Width = 160,
-                Height = 90,
+                Width = 250,
+                Height = 150,
                 Wrapped = wrapped ?? WrapWorld.IsChecked ?? false
             };
         }
