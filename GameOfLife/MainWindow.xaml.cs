@@ -24,10 +24,12 @@ namespace GameOfLife
         private const int SquareSize = 3;
         protected Game Game { get; set; }
         private Dictionary<string, Rectangle> rectangles;
+        private int? lastSeed;
 
         public MainWindow()
         {
-            Game = new Game {InitialWorldHeight = 90, InitialWorldWidth = 160};
+            Settings settings = GetSettings(wrapped:false);
+            Game = new Game(settings);
             InitializeComponent();
         }
 
@@ -39,6 +41,40 @@ namespace GameOfLife
 
         protected override void OnRender(DrawingContext drawingContext)
         {
+        }
+
+        private void Create_Click(object sender, RoutedEventArgs e)
+        {
+            Settings settings = GetSettings();
+            Game = new Game(settings);
+        }
+
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            lastSeed = Game.Populate(lastSeed);
+            DrawGame();
+        }
+
+        private void Populate_Click(object sender, RoutedEventArgs e)
+        {
+            lastSeed = Game.Populate();
+            DrawGame();
+        }
+
+        private void Next_Click(object sender, RoutedEventArgs e)
+        {
+            Game.Next();
+            DrawGame();
+        }
+
+        private Settings GetSettings(bool? wrapped = null)
+        {
+            return new Settings
+            {
+                Width = 160,
+                Height = 90,
+                Wrapped = wrapped ?? WrapWorld.IsChecked ?? false
+            };
         }
 
         private void InitiateGameView()
@@ -97,18 +133,6 @@ namespace GameOfLife
         {
             string key = GetRectangleKey(i, j);
             return rectangles[key];
-        }
-
-        private void Reset_Click(object sender, RoutedEventArgs e)
-        {
-            Game.Reset();
-            DrawGame();
-        }
-
-        private void Next_Click(object sender, RoutedEventArgs e)
-        {
-            Game.Next();
-            DrawGame();
         }
     }
 }

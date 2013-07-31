@@ -9,19 +9,18 @@ namespace Jums.GameOfLife.CoreCSharp
     /// Master of life and death. She giveth, and taketh away life according to 
     /// the rules of the game of life.
     /// </summary>
-    class MotherNature
+    internal class MotherNature
     {
         private List<Func<bool, int, World, bool?>> Laws
         {
             get
             {
-                return new List<Func<bool, int, World, bool?>> {
+                return new List<Func<bool, int, World, bool?>>
+                {
                     Law1, Law2, Law3, Law4
                 };
             }
         }
-
-        public MotherNature() { }
 
         public World Evolve(World world)
         {

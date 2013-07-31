@@ -17,6 +17,11 @@ namespace Jums.GameOfLife.CoreCSharp
         private int fillRate = 10;
         private IList<bool> lifeStates;
 
+        public World(int width, int height, bool wrapped) : this(width, height)
+        {
+            Wrapped = wrapped;
+        }
+
         public World(int width, int height)
         {
             if (width < MinimumSize) throw new ArgumentOutOfRangeException("width", string.Format("width was less than the minimum {0}", MinimumSize));
@@ -29,6 +34,7 @@ namespace Jums.GameOfLife.CoreCSharp
 
         public int Width { get; private set; }
         public int Height { get; private set; }
+        public bool Wrapped { get; private set; }
 
         /// <summary>
         /// Enumeration of all positions in the world.
@@ -78,7 +84,7 @@ namespace Jums.GameOfLife.CoreCSharp
         /// Fills the world with random life where amount of life versus death is
         /// precisely determined by the <c>FillRate</c>.
         /// </summary>
-        public void CreateLife(int? seed = null)
+        public int CreateLife(int? seed = null)
         {
             int positions = lifeStates.Count;
             int lifeAmount = (int) Math.Round(FillRate/100f*positions);
@@ -96,6 +102,8 @@ namespace Jums.GameOfLife.CoreCSharp
                 lifeStates[i] = life[lifeIndex];
                 life.RemoveAt(lifeIndex);
             }
+
+            return seed.Value;
         }
 
         /// <summary>

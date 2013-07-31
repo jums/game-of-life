@@ -12,54 +12,37 @@ namespace Jums.GameOfLife.CoreCSharp
     {
         private World World { get; set; }
         private MotherNature MotherNature { get; set; }
+        public Settings Settings { get; private set; }
 
-        public Game()
+        public Game(Settings settings)
         {
-            MaxTicks = 100;
-            InitialWorldWidth = 160;
-            InitialWorldHeight = 90;
+            World = new World(settings.Width, settings.Height, settings.Wrapped);
             MotherNature = new MotherNature();
-            World = new World(InitialWorldWidth, InitialWorldHeight);
+        }
+
+        public Game() : this(new Settings {Height = 45, Width = 80, Wrapped = false})
+        {
         }
 
         /// <summary>
-        /// Maximum number of "ticks", rounds, years, units of time.
-        /// Game ends after reaching this tick count at the latest.
+        /// Width of the current world.
         /// </summary>
-        public int MaxTicks { get; set; }
-
-        /// <summary>
-        /// Initial width of the world.
-        /// </summary>
-        public int InitialWorldWidth { get; set; }
-
-        /// <summary>
-        /// Initial height of the world.
-        /// </summary>
-        public int InitialWorldHeight { get; set; }
-
         public int Width
         {
             get { return World.Width; }
         }
 
+        /// <summary>
+        /// Height of the current world.
+        /// </summary>
         public int Height
         {
             get { return World.Height; }
         }
 
-        /// <summary>
-        /// Seed number for the randomization of the initial life.
-        /// </summary>
-        public int? Seed { get; set; }
-
-        /// <summary>
-        /// Initiates the world and fills it with life that will evolve 
-        /// tick-by-tick until <c>MaxTics</c> is reached.
-        /// </summary>
-        public void Start()
+        public bool[,] State
         {
-            // TODO
+            get { return World.To2DArray(); }
         }
 
         /// <summary>
@@ -70,14 +53,14 @@ namespace Jums.GameOfLife.CoreCSharp
             World = MotherNature.Evolve(World);
         }
 
-        public bool[,] State
+        /// <summary>
+        /// Fills the world with new life and clears the old.
+        /// </summary>
+        /// <param name="seed">The seed for randomizer. Automatically generated if left empty or null.</param>
+        /// <returns>The used seed for randomizer.</returns>
+        public int Populate(int? seed = null)
         {
-            get { return World.To2DArray(); }
-        }
-
-        public void Reset()
-        {
-            World.CreateLife(Seed);
+            return World.CreateLife(seed);
         }
     }
 }
