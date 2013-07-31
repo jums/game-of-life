@@ -19,16 +19,16 @@
             </Border>
             <Border CornerRadius="6" BorderBrush="Gray" BorderThickness="2" Margin="5" Padding="10,0,10,10">
                 <StackPanel>
-                    <Label HorizontalAlignment="Center">Shits</Label>
+                    <Label HorizontalAlignment="Center">Repopulate with</Label>
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="Reset" Content="Reset" HorizontalAlignment="Left" Margin="0,0,10,0" Height="25" VerticalAlignment="Top" Width="Auto" Click="Reset_Click" />
-                        <Button x:Name="Populate" Content="Populate" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="Auto" Click="Populate_Click" />
+                        <Button x:Name="Reset" Content="Same seed" HorizontalAlignment="Left" Margin="0,0,10,0" Height="25" VerticalAlignment="Top" Width="Auto" Click="Reset_Click" />
+                        <Button x:Name="Populate" Content="New seed" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="Auto" Click="Populate_Click" />
                     </StackPanel>
                 </StackPanel>
             </Border>
-            <Border CornerRadius="6" BorderBrush="Gray" BorderThickness="2" Margin="5" Padding="10,0,10,10">
+            <Border CornerRadius="6" BorderBrush="Gray" BorderThickness="2" Margin="5" Padding="10,10,10,10">
                 <StackPanel>
-                    <Label HorizontalAlignment="Center">Game controls</Label>
+                    <!--<Label HorizontalAlignment="Center">Game controls</Label>-->
                     <Button x:Name="Next" Content="Next round" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="Auto" Click="Next_Click"/>
                 </StackPanel>
             </Border>
