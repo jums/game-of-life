@@ -1,18 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 using Jums.GameOfLife.CoreCSharp;
 
 namespace GameOfLife
@@ -23,23 +14,24 @@ namespace GameOfLife
     public partial class MainWindow : Window
     {
         private const int SquareSize = 3;
-        protected Game Game { get; set; }
+        private const int SlowInterval = 400;
+        private const int FastInterval = 100;
+        private Game game;
+        private Player player;
         private Dictionary<string, Rectangle> rectangles;
         private int? lastSeed;
-        private Player player;
 
         public MainWindow()
         {
-            Settings settings = GetSettings(wrapped:false);
-            Game = new Game(settings);
             InitializeComponent();
         }
 
         protected override void OnInitialized(EventArgs e)
         {
+            NewGame();
+            PopulateWorld();
             InitiateGameView();
-            WorldCanvas.Width = Game.Width * SquareSize;
-            WorldCanvas.Height = Game.Height * SquareSize;
+            DrawGame();
             base.OnInitialized(e);
         }
 
@@ -50,40 +42,39 @@ namespace GameOfLife
         private void Create_Click(object sender, RoutedEventArgs e)
         {
             StopPlaying();
-            Settings settings = GetSettings();
-            Game = new Game(settings);
-            lastSeed = Game.Populate();
+            NewGame();
+            PopulateWorld();
             DrawGame();
         }
 
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
             StopPlaying();
-            lastSeed = Game.Populate(lastSeed);
+            PopulateWorld(lastSeed);
             DrawGame();
         }
 
         private void Populate_Click(object sender, RoutedEventArgs e)
         {
             StopPlaying();
-            lastSeed = Game.Populate();
+            PopulateWorld();
             DrawGame();
         }
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
-            Game.Next();
+            game.Next();
             DrawGame();
         }
 
         private void PlaySlow_Click(object sender, RoutedEventArgs e)
         {
-            StartPlaying(TimeSpan.FromMilliseconds(400));
+            StartPlaying(TimeSpan.FromMilliseconds(SlowInterval));
         }
 
         private void PlayFast_Click(object sender, RoutedEventArgs e)
         {
-            StartPlaying(TimeSpan.FromMilliseconds(100));
+            StartPlaying(TimeSpan.FromMilliseconds(FastInterval));
         }
 
         private void Stop_Click(object sender, RoutedEventArgs e)
@@ -91,19 +82,10 @@ namespace GameOfLife
             StopPlaying();
         }
 
-        private void StartPlaying(TimeSpan interval)
+        private void NewGame()
         {
-            StopPlaying();
-            player = new Player(DrawGame, Game.Next);
-            player.Play(interval);
-        }
-
-        private void StopPlaying()
-        {
-            if (player != null)
-            {
-                player.Stop();
-            }
+            Settings settings = GetSettings();
+            game = new Game(settings);
         }
 
         private Settings GetSettings(bool? wrapped = null)
@@ -116,15 +98,60 @@ namespace GameOfLife
             };
         }
 
+        private void PopulateWorld(int? seed = null)
+        {
+            lastSeed = game.Populate(seed);
+        }
+
+        private void DrawGame()
+        {
+            var state = game.State;
+
+            for (int x = 0; x < game.Width; x++)
+            {
+                for (int y = 0; y < game.Height; y++)
+                {
+                    Rectangle rectangle = GetRectangle(x, y);
+                    Brush color = state[x, y] ? Brushes.GreenYellow : WorldCanvas.Background;
+                    rectangle.Fill = color;
+                }
+            }
+        }
+
+        private Rectangle GetRectangle(int i, int j)
+        {
+            string key = GetRectangleKey(i, j);
+            return rectangles[key];
+        }
+
+        private void StartPlaying(TimeSpan interval)
+        {
+            StopPlaying();
+            player = new Player(DrawGame, game.Next);
+            player.Play(interval);
+        }
+
+        private void StopPlaying()
+        {
+            if (player != null)
+            {
+                player.Stop();
+            }
+        }
+
         private void InitiateGameView()
         {
+            WorldCanvas.Children.Clear();
+            WorldCanvas.Width = game.Width*SquareSize;
+            WorldCanvas.Height = game.Height*SquareSize;
+
             rectangles = new Dictionary<string, Rectangle>();
 
-            for (int i = 0; i < Game.Width; i++)
+            for (int i = 0; i < game.Width; i++)
             {
                 int x = i*SquareSize;
 
-                for (int j = 0; j < Game.Height; j++)
+                for (int j = 0; j < game.Height; j++)
                 {
                     int y = j*SquareSize;
                     var rectangle = AddRectangleToView(x, y);
@@ -151,27 +178,6 @@ namespace GameOfLife
             Canvas.SetLeft(rectangle, x);
             Canvas.SetTop(rectangle, y);
             return rectangle;
-        }
-
-        private void DrawGame()
-        {
-            var state = Game.State;
-
-            for (int x = 0; x < Game.Width; x++)
-            {
-                for (int y = 0; y < Game.Height; y++)
-                {
-                    Rectangle rectangle = GetRectangle(x, y);
-                    Brush color = state[x, y] ? Brushes.GreenYellow : WorldCanvas.Background;
-                    rectangle.Fill = color;
-                }
-            }
-        }
-
-        private Rectangle GetRectangle(int i, int j)
-        {
-            string key = GetRectangleKey(i, j);
-            return rectangles[key];
         }
     }
 }
