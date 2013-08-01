@@ -11,13 +11,12 @@ namespace Jums.GameOfLife.CoreCSharp
     public class Game
     {
         private World World { get; set; }
-        private MotherNature MotherNature { get; set; }
-        public Settings Settings { get; private set; }
+        private Darwin Darwin { get; set; }
 
         public Game(Settings settings)
         {
             World = new World(settings.Width, settings.Height, settings.Wrapped);
-            MotherNature = new MotherNature();
+            Darwin = new Darwin();
         }
 
         public Game() : this(new Settings {Height = 45, Width = 80, Wrapped = false})
@@ -50,7 +49,7 @@ namespace Jums.GameOfLife.CoreCSharp
         /// </summary>
         public void Next()
         {
-            World = MotherNature.Evolve(World);
+            World = Darwin.Evolve(World);
         }
 
         /// <summary>

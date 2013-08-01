@@ -6,10 +6,9 @@ using System.Text;
 namespace Jums.GameOfLife.CoreCSharp
 {
     /// <summary>
-    /// Master of life and death. She giveth, and taketh away life according to 
-    /// the rules of the game of life.
+    /// Master of evolution. Handles birth, life and death through the ages.
     /// </summary>
-    internal class MotherNature
+    internal class Darwin
     {
         private List<Func<bool, int, World, bool?>> Laws
         {
