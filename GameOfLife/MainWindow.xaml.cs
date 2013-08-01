@@ -90,7 +90,8 @@ namespace Jums.GameOfLife.WindowsClient
             {
                 Width = 250,
                 Height = 150,
-                Wrapped = wrapped ?? WrapWorld.IsChecked ?? false
+                Wrapped = wrapped ?? WrapWorld.IsChecked ?? false,
+                FillRate = FillRate.Value
             };
         }
 
