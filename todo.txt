@@ -1,11 +1,4 @@
-
-- C# version core
-  - Grim Reaper (evolution logic)
-  - God (puppet master)
-  - Game (user api)
-
 - Misc features
-  - Create life/world from seed -> gives same initial state every time.
-  - Graphical view/animation.
+  - Specify/show seed from UI.
 
-- F# version.
+- F# core.
