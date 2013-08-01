@@ -209,13 +209,15 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
         [Test]
         public void CopyShouldHaveSameLifeStatesAndDimensions()
         {
-            simpleWorld.FillRate = 26;
-            simpleWorld.CreateLife();
-            World another = simpleWorld.Copy();
-            Assert.AreEqual(simpleWorld.Width, another.Width);
-            Assert.AreEqual(simpleWorld.Height, another.Height);
-            Assert.AreEqual(simpleWorld.FillRate, another.FillRate);
-            CollectionAssert.AreEqual(simpleWorld.Positions, another.Positions);
+            var world = new World(12, 14, true);
+            world.FillRate = 26;
+            world.CreateLife();
+            World another = world.Copy();
+            Assert.AreEqual(world.Width, another.Width);
+            Assert.AreEqual(world.Height, another.Height);
+            Assert.AreEqual(world.FillRate, another.FillRate);
+            Assert.AreEqual(world.Wrapped, another.Wrapped);
+            CollectionAssert.AreEqual(world.Positions, another.Positions);
         }
 
         [Test]

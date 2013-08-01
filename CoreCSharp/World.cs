@@ -34,7 +34,7 @@ namespace Jums.GameOfLife.CoreCSharp
 
         public int Width { get; private set; }
         public int Height { get; private set; }
-        public bool Wrapped { get; private set; }
+        public bool Wrapped { get; set; } // Yeah, a flat world can suddenly become round, like in real life.
 
         /// <summary>
         /// Enumeration of all positions in the world.
@@ -132,7 +132,8 @@ namespace Jums.GameOfLife.CoreCSharp
             return new World(Width, Height)
             {
                 lifeStates = lifeStates.ToList(),
-                FillRate = FillRate
+                FillRate = FillRate,
+                Wrapped = Wrapped
             };
         }
 
