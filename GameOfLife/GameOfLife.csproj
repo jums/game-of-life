@@ -7,7 +7,7 @@
     <ProjectGuid>{ED35348C-BFBA-4A24-82F4-7864A8D037E2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GameOfLife</RootNamespace>
+    <RootNamespace>Jums.GameOfLife.WindowsClient</RootNamespace>
     <AssemblyName>GameOfLife</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

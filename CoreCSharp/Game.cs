@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Jums.GameOfLife.CoreCSharp
+﻿namespace Jums.GameOfLife.CoreCSharp
 {
     /// <summary>
     /// The game engine of the game of life.
     /// </summary>
     public class Game
     {
-        private World World { get; set; }
-        private Darwin Darwin { get; set; }
+        private World world;
+        private readonly Darwin darwin;
+        private readonly GreatMaker greatMaker;
 
         public Game(Settings settings)
         {
-            World = new World(settings.Width, settings.Height, settings.Wrapped);
-            Darwin = new Darwin();
+            world = new World(settings.Width, settings.Height, settings.Wrapped);
+            greatMaker = new GreatMaker(settings.FillRate);
+            darwin = new Darwin();
         }
 
         public Game() : this(new Settings {Height = 45, Width = 80, Wrapped = false})
@@ -28,7 +25,7 @@ namespace Jums.GameOfLife.CoreCSharp
         /// </summary>
         public int Width
         {
-            get { return World.Width; }
+            get { return world.Width; }
         }
 
         /// <summary>
@@ -36,12 +33,12 @@ namespace Jums.GameOfLife.CoreCSharp
         /// </summary>
         public int Height
         {
-            get { return World.Height; }
+            get { return world.Height; }
         }
 
         public bool[,] State
         {
-            get { return World.To2DArray(); }
+            get { return world.To2DArray(); }
         }
 
         /// <summary>
@@ -49,7 +46,7 @@ namespace Jums.GameOfLife.CoreCSharp
         /// </summary>
         public void Next()
         {
-            World = Darwin.Evolve(World);
+            world = darwin.Evolve(world);
         }
 
         /// <summary>
@@ -59,7 +56,7 @@ namespace Jums.GameOfLife.CoreCSharp
         /// <returns>The used seed for randomizer.</returns>
         public int Populate(int? seed = null)
         {
-            return World.CreateLife(seed);
+            return greatMaker.CreateLife(world, seed);
         }
     }
 }

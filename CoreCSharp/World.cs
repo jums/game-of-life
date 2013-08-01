@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Runtime.CompilerServices;
 
 namespace Jums.GameOfLife.CoreCSharp
@@ -14,7 +13,6 @@ namespace Jums.GameOfLife.CoreCSharp
     internal class World
     {
         public const int MinimumSize = 10;
-        private int fillRate = 10;
         private IList<bool> lifeStates;
 
         public World(int width, int height, bool wrapped) : this(width, height)
@@ -37,25 +35,11 @@ namespace Jums.GameOfLife.CoreCSharp
         public bool Wrapped { get; set; } // Yeah, a flat world can suddenly become round, like in real life.
 
         /// <summary>
-        /// Enumeration of all positions in the world.
+        /// Enumeration of all positions life states in the world.
         /// </summary>
-        public IEnumerable<bool> Positions
+        public IEnumerable<bool> State
         {
             get { return new ReadOnlyCollectionBuilder<bool>(lifeStates).ToReadOnlyCollection(); }
-        }
-
-        /// <summary>
-        /// The percentage of positions that should contain life.
-        /// </summary>
-        public int FillRate
-        {
-            get { return fillRate; }
-            set
-            {
-                if (value > 100) fillRate = 100;
-                else if (value < 0) fillRate = 0;
-                else fillRate = value;
-            }
         }
 
         /// <summary>
@@ -78,32 +62,6 @@ namespace Jums.GameOfLife.CoreCSharp
         internal int GetPositionIndex(int x, int y)
         {
             return y*Width + x;
-        }
-
-        /// <summary>
-        /// Fills the world with random life where amount of life versus death is
-        /// precisely determined by the <c>FillRate</c>.
-        /// </summary>
-        public int CreateLife(int? seed = null)
-        {
-            int positions = lifeStates.Count;
-            int lifeAmount = (int) Math.Round(FillRate/100f*positions);
-
-            List<bool> life = new List<bool>(positions);
-            life.AddRange(Enumerable.Repeat(true, lifeAmount));
-            life.AddRange(Enumerable.Repeat(false, positions - lifeAmount));
-
-            seed = seed ?? (int) (DateTime.Now.Ticks%Int32.MaxValue + GetHashCode());
-            Random random = new Random(seed.Value);
-
-            for (int i = 0; i < positions; i++) // loop through actual positions
-            {
-                int lifeIndex = random.Next()%life.Count;
-                lifeStates[i] = life[lifeIndex];
-                life.RemoveAt(lifeIndex);
-            }
-
-            return seed.Value;
         }
 
         /// <summary>
@@ -132,11 +90,14 @@ namespace Jums.GameOfLife.CoreCSharp
             return new World(Width, Height)
             {
                 lifeStates = lifeStates.ToList(),
-                FillRate = FillRate,
                 Wrapped = Wrapped
             };
         }
 
+        /// <summary>
+        /// Expresses life states as a 2D bool array.
+        /// </summary>
+        /// <returns></returns>
         public bool[,] To2DArray()
         {
             bool[,] state = new bool[Width,Height];
@@ -160,11 +121,7 @@ namespace Jums.GameOfLife.CoreCSharp
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    yield return new Position
-                    {
-                        X = x,
-                        Y = y
-                    };
+                    yield return new Position(x, y);
                 }
             }
         }
@@ -189,11 +146,7 @@ namespace Jums.GameOfLife.CoreCSharp
                 new {x = 0, y = 1}
             };
 
-            var positions =  modifiers.Select(modifier => new Position
-            {
-                X = x + modifier.x,
-                Y = y + modifier.y,
-            });
+            var positions = modifiers.Select(m => new Position(x + m.x, y + m.y));
 
             if (Wrapped)
             {
@@ -210,11 +163,10 @@ namespace Jums.GameOfLife.CoreCSharp
 
         private Position Wrap(Position position)
         {
-            return new Position
-            {
-                X = WrapDimension(position.X, Width),
-                Y = WrapDimension(position.Y, Height)
-            };
+            return new Position(
+                x: WrapDimension(position.X, Width),
+                y: WrapDimension(position.Y, Height)
+                );
         }
 
         private int WrapDimension(int x, int max)

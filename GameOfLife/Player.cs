@@ -1,15 +1,17 @@
 ﻿using System;
-using System.Timers;
 using System.Windows.Threading;
 
-namespace GameOfLife
+namespace Jums.GameOfLife.WindowsClient
 {
-    class Player
+    /// <summary>
+    /// Automatic player of the game.
+    /// </summary>
+    internal class Player
     {
         private readonly object evolveLock = new object();
         private readonly Action draw;
         private readonly Action evolve;
-        readonly DispatcherTimer timer = new DispatcherTimer();
+        private readonly DispatcherTimer timer = new DispatcherTimer();
 
         public Player(Action draw, Action evolve)
         {
@@ -22,18 +24,13 @@ namespace GameOfLife
             timer.Interval = interval;
             timer.Tick += (sender, args) =>
                 {
-                    InvokeEvolve();
-                    InvokeDraw();
+                    SynchronizedEvolve();
+                    draw();
                 };
             timer.Start();
         }
 
-        private void InvokeDraw()
-        {
-            draw();
-        }
-
-        private void InvokeEvolve()
+        private void SynchronizedEvolve()
         {
             lock (evolveLock)
             {
@@ -45,6 +42,5 @@ namespace GameOfLife
         {
             timer.Stop();
         }
-
     }
 }

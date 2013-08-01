@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Jums.GameOfLife.CoreCSharp;
 
-namespace GameOfLife
+namespace Jums.GameOfLife.WindowsClient
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -33,10 +33,6 @@ namespace GameOfLife
             InitiateGameView();
             DrawGame();
             base.OnInitialized(e);
-        }
-
-        protected override void OnRender(DrawingContext drawingContext)
-        {
         }
 
         private void Create_Click(object sender, RoutedEventArgs e)

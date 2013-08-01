@@ -9,12 +9,14 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
     [TestFixture]
     public class WorldTests
     {
-        World simpleWorld;
+        private World simpleWorld;
+        private GreatMaker greatMaker;
 
         [TestFixtureSetUp]
         public void FixtureSetUp()
         {
             simpleWorld = new World(10, 10);
+            greatMaker = new GreatMaker(10);
         }
 
         [Test]
@@ -44,35 +46,13 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
         }
 
         [Test]
-        [ExpectedException("System.IndexOutOfRangeException")]
-        public void CoordinateOverLimitX()
+        public void CoordinatesOutsideNonWrappedWorldAreDead()
         {
             World world = new World(10, 10);
-            world.IsAlive(9, 10);
-        }
-
-        [Test]
-        [ExpectedException("System.IndexOutOfRangeException")]
-        public void CoordinateBelowLimitX()
-        {
-            World world = new World(10, 10);
-            world.IsAlive(-1, 0);
-        }
-
-        [Test]
-        [ExpectedException("System.IndexOutOfRangeException")]
-        public void CoordinateOverLimitY()
-        {
-            World world = new World(10, 10);
-            world.IsAlive(0, 10);
-        }
-
-        [Test]
-        [ExpectedException("System.IndexOutOfRangeException")]
-        public void CoordinateBelowLimitY()
-        {
-            World world = new World(10, 10);
-            world.IsAlive(5, -1);
+            Assert.False(world.IsAlive(9, 10));
+            Assert.False(world.IsAlive(-1, 0));
+            Assert.False(world.IsAlive(0, 10));
+            Assert.False(world.IsAlive(5, -1));
         }
 
         [Test]
@@ -85,7 +65,7 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
             Assert.AreEqual(10, world.GetPositionIndex(0, 1));
             Assert.AreEqual(19, world.GetPositionIndex(9, 1));
             Assert.AreEqual(99, world.GetPositionIndex(9, 9));
-            
+
             world = new World(14, 15);
             Assert.AreEqual(0, world.GetPositionIndex(0, 0));
             Assert.AreEqual(3, world.GetPositionIndex(3, 0));
@@ -109,115 +89,62 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
         }
 
         [Test]
-        public void SetFillRate()
-        {
-            World world = new World(20, 20);
-            world.FillRate = 10;
-            Assert.AreEqual(10, world.FillRate);
-            world.FillRate = 90;
-            Assert.AreEqual(90, world.FillRate);
-            world.FillRate = 101;
-            Assert.AreEqual(100, world.FillRate);
-            world.FillRate = -5;
-            Assert.AreEqual(0, world.FillRate);
-        }
-
-        [Test]
-        public void RandomizeWorldAintTotallyDead()
-        {
-            World world = new World(20, 20);
-
-            world.CreateLife();
-            Assert.Greater(CountLife(world), 0);
-        }
-
-        [Test]
-        public void RandomizeWorldFillsLifeWithFillRate()
-        {
-            World world = new World(20, 20);
-
-            world.FillRate = 50;
-            world.CreateLife();
-            Assert.AreEqual(200, CountLife(world));
-
-            world.FillRate = 66;
-            world.CreateLife();
-            Assert.AreEqual(264, CountLife(world));
-        }
-
-        [Test]
-        public void RandomizeWorldIsRandom() // Ignoring the chance it may create the same world twice.
-        {
-            World world1 = new World(20, 20);
-            world1.CreateLife();
-            var life1 = GetLifeCoordinates(world1);
-
-            World world2 = new World(20, 20);
-            world2.CreateLife();
-            var life2 = GetLifeCoordinates(world2);
-
-            CollectionAssert.AreNotEquivalent(life1, life2);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof (ArgumentNullException))]
         public void ImportShouldThrowFromNullData()
         {
             simpleWorld.Import(null);
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof (ArgumentException))]
         public void ImportShouldThrowFromDataWithTooSmallLength()
         {
-            simpleWorld.Import(Enumerable.Repeat(false, 10 * 10 - 1));
+            simpleWorld.Import(Enumerable.Repeat(false, 10*10 - 1));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof (ArgumentException))]
         public void ImportShouldThrowFromDataWithTooLargeLength()
         {
-            simpleWorld.Import(Enumerable.Repeat(false, 10 * 10 + 1));
+            simpleWorld.Import(Enumerable.Repeat(false, 10*10 + 1));
         }
 
         [Test]
         public void ImportShouldAcceptAllDead()
         {
-            simpleWorld.CreateLife();
-            simpleWorld.Import(Enumerable.Repeat(false, 10 * 10));
-            Assert.True(simpleWorld.Positions.All(p => p == false));
+            greatMaker.CreateLife(simpleWorld);
+            simpleWorld.Import(Enumerable.Repeat(false, 10*10));
+            Assert.True(simpleWorld.State.All(p => p == false));
         }
 
         [Test]
         public void ImportShouldAcceptAllAlive()
         {
-            simpleWorld.CreateLife();
-            simpleWorld.Import(Enumerable.Repeat(true, 10 * 10));
-            Assert.True(simpleWorld.Positions.All(p => p == true));
+            greatMaker.CreateLife(simpleWorld);
+            simpleWorld.Import(Enumerable.Repeat(true, 10*10));
+            Assert.True(simpleWorld.State.All(p => p));
         }
 
         [Test]
         public void ImportShouldAcceptRandomWorld()
         {
-            simpleWorld.CreateLife();
+            greatMaker.CreateLife(simpleWorld);
             Random random = new Random();
-            var randomData = Enumerable.Repeat(true, 10 * 10).Select(x => random.Next() % 2 == 0).ToArray();
+            var randomData = Enumerable.Repeat(true, 10*10).Select(x => random.Next()%2 == 0).ToArray();
             simpleWorld.Import(randomData);
-            CollectionAssert.AreEqual(randomData, simpleWorld.Positions);
+            CollectionAssert.AreEqual(randomData, simpleWorld.State);
         }
 
         [Test]
         public void CopyShouldHaveSameLifeStatesAndDimensions()
         {
             var world = new World(12, 14, true);
-            world.FillRate = 26;
-            world.CreateLife();
+            greatMaker.CreateLife(simpleWorld);
             World another = world.Copy();
             Assert.AreEqual(world.Width, another.Width);
             Assert.AreEqual(world.Height, another.Height);
-            Assert.AreEqual(world.FillRate, another.FillRate);
             Assert.AreEqual(world.Wrapped, another.Wrapped);
-            CollectionAssert.AreEqual(world.Positions, another.Positions);
+            CollectionAssert.AreEqual(world.State, another.State);
         }
 
         [Test]
@@ -309,37 +236,6 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
             };
 
             Assert.True(expected.All(p => positions.Any(pp => pp.X == p.x && pp.Y == p.y)));
-        }
-
-        private List<Point> GetLifeCoordinates(World world)
-        {
-            var coordinates = GetAllCoordinates(world);
-            return coordinates.Where(c => world.IsAlive(c.X, c.Y)).ToList();
-        }
-
-        private int CountLife(World world)
-        {
-            return world.Positions.Count(p => p == true);
-        }
-
-        private static IEnumerable<Point> GetAllCoordinates(World world)
-        {
-            var coordinates =
-                from x in Enumerable.Range(0, world.Width)
-                from y in Enumerable.Range(0, world.Height)
-                select new Point { X = x, Y = y };
-            return coordinates;
-        }
-
-        private struct Point
-        {
-            public int X;
-            public int Y;
-
-            public override string ToString()
-            {
-                return string.Format("x:{0} y:{1}", X, Y);
-            }
         }
     }
 }

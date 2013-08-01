@@ -1,4 +1,4 @@
-﻿<Application x:Class="GameOfLife.App"
+﻿<Application x:Class="Jums.GameOfLife.WindowsClient.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="MainWindow.xaml">
