@@ -1,4 +1,0 @@
-- Misc features
-  - Specify/show seed from UI.
-
-- F# core.
