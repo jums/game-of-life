@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Jums.GameOfLife.CoreCSharp;
@@ -13,6 +15,8 @@ namespace Jums.GameOfLife.WindowsClient
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly Brush LifeBrush = Brushes.GreenYellow;
+        private readonly Brush DeadBrush = Brushes.White;
         private const int SquareSize = 3;
         private const int SlowInterval = 400;
         private const int FastInterval = 100;
@@ -31,7 +35,7 @@ namespace Jums.GameOfLife.WindowsClient
             NewGame();
             PopulateWorld();
             InitiateGameView();
-            DrawGame();
+            RenderGame();
             base.OnInitialized(e);
         }
 
@@ -40,27 +44,49 @@ namespace Jums.GameOfLife.WindowsClient
             StopPlaying();
             NewGame();
             PopulateWorld();
-            DrawGame();
+            RenderGame();
+        }
+
+        private void Clear_Click(object sender, RoutedEventArgs e)
+        {
+            NewGame();
+            RenderGame();
+        }
+
+        private void Draw_Click(object sender, RoutedEventArgs e)
+        {
+            Draw.IsEnabled = false;
+            DrawDone.Visibility = Visibility.Visible;
+            StartDrawing();
+            // TODO
+        }
+
+        private void DrawDone_Click(object sender, RoutedEventArgs e)
+        {
+            Draw.IsEnabled = true;
+            DrawDone.Visibility = Visibility.Hidden;
+            StopDrawing();
+            // TODO
         }
 
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
             StopPlaying();
             PopulateWorld(lastSeed);
-            DrawGame();
+            RenderGame();
         }
 
         private void Populate_Click(object sender, RoutedEventArgs e)
         {
             StopPlaying();
             PopulateWorld();
-            DrawGame();
+            RenderGame();
         }
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
             game.Next();
-            DrawGame();
+            RenderGame();
         }
 
         private void PlaySlow_Click(object sender, RoutedEventArgs e)
@@ -100,7 +126,7 @@ namespace Jums.GameOfLife.WindowsClient
             lastSeed = game.Populate(seed);
         }
 
-        private void DrawGame()
+        private void RenderGame()
         {
             var state = game.State;
 
@@ -109,9 +135,27 @@ namespace Jums.GameOfLife.WindowsClient
                 for (int y = 0; y < game.Height; y++)
                 {
                     Rectangle rectangle = GetRectangle(x, y);
-                    Brush color = state[x, y] ? Brushes.GreenYellow : WorldCanvas.Background;
+                    Brush color = state[x, y] ? LifeBrush : DeadBrush;
                     rectangle.Fill = color;
                 }
+            }
+        }
+
+        private void StartDrawing()
+        {
+            foreach (var rectangle in rectangles.Values)
+            {
+                rectangle.Cursor = Cursors.Pen;
+                rectangle.MouseEnter += RectangleOnMouseEnter;
+            }
+        }
+
+        private void StopDrawing()
+        {
+            foreach (var rectangle in rectangles.Values)
+            {
+                rectangle.Cursor = null;
+                rectangle.MouseEnter -= RectangleOnMouseEnter;
             }
         }
 
@@ -124,7 +168,7 @@ namespace Jums.GameOfLife.WindowsClient
         private void StartPlaying(TimeSpan interval)
         {
             StopPlaying();
-            player = new Player(DrawGame, game.Next);
+            player = new Player(RenderGame, game.Next);
             player.Play(interval);
         }
 
@@ -175,6 +219,20 @@ namespace Jums.GameOfLife.WindowsClient
             Canvas.SetLeft(rectangle, x);
             Canvas.SetTop(rectangle, y);
             return rectangle;
+        }
+
+        private void RectangleOnMouseEnter(object sender, MouseEventArgs e)
+        {
+            var rectangle = sender as Rectangle;
+
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                rectangle.Fill = LifeBrush;
+            }
+            else if (e.RightButton == MouseButtonState.Pressed)
+            {
+                rectangle.Fill = DeadBrush;
+            }
         }
     }
 }

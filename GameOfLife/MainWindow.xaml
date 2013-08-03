@@ -32,6 +32,16 @@
             </Border>
             <Border CornerRadius="6" BorderBrush="Gray" BorderThickness="2" Margin="5" Padding="10,0,10,10">
                 <StackPanel>
+                    <Label HorizontalAlignment="Center">Custom state</Label>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="Clear" Content="Clear" HorizontalAlignment="Left" Margin="0,0,20,0" Height="25" VerticalAlignment="Top" Width="Auto" Click="Clear_Click" />
+                        <Button x:Name="Draw" Content="Draw" HorizontalAlignment="Left" Margin="0,0,10,0" Height="25" VerticalAlignment="Top" Width="Auto" Click="Draw_Click" />
+                        <Button x:Name="DrawDone" Content="Done" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="Auto" Click="DrawDone_Click" Visibility="Hidden" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <Border CornerRadius="6" BorderBrush="Gray" BorderThickness="2" Margin="5" Padding="10,0,10,10">
+                <StackPanel>
                     <Label HorizontalAlignment="Center">Play</Label>
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="Stop" Content="■ Stop" HorizontalAlignment="Left" Height="25" Margin="0,0,10,0" VerticalAlignment="Top" Width="Auto" Click="Stop_Click"/>
