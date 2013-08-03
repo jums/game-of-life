@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Jums.GameOfLife.WindowsClient.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Game of Life" Height="Auto" Width="Auto" SizeToContent="WidthAndHeight" ResizeMode="NoResize" Icon="logo.png">
+        Title="Game of Life" Height="Auto" Width="Auto" SizeToContent="WidthAndHeight" ResizeMode="NoResize" Icon="logo.png" FontFamily="Consolas">
     <StackPanel Orientation="Horizontal">
         <Canvas Name="WorldCanvas" HorizontalAlignment="Left" VerticalAlignment="Top" Width="480" Height="Auto" />
         <Separator Height="1">
@@ -34,9 +34,9 @@
                 <StackPanel>
                     <Label HorizontalAlignment="Center">Play</Label>
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="Stop" Content="Stop" HorizontalAlignment="Left" Height="25" Margin="0,0,10,0" VerticalAlignment="Top" Width="Auto" Click="Stop_Click"/>
-                        <Button x:Name="PlaySlow" Content="Slow >" HorizontalAlignment="Left" Height="25" Margin="0,0,10,0" VerticalAlignment="Top" Width="Auto" Click="PlaySlow_Click"/>
-                        <Button x:Name="PlayFast" Content="Fast >>" HorizontalAlignment="Left" Height="25" Margin="0,0,0,0" VerticalAlignment="Top" Width="Auto" Click="PlayFast_Click"/>
+                        <Button x:Name="Stop" Content="■ Stop" HorizontalAlignment="Left" Height="25" Margin="0,0,10,0" VerticalAlignment="Top" Width="Auto" Click="Stop_Click"/>
+                        <Button x:Name="PlaySlow" Content="► Slow" HorizontalAlignment="Left" Height="25" Margin="0,0,10,0" VerticalAlignment="Top" Width="Auto" Click="PlaySlow_Click" />
+                        <Button x:Name="PlayFast" Content="►► Fast" HorizontalAlignment="Left" Height="25" Margin="0,0,0,0" VerticalAlignment="Top" Width="Auto" Click="PlayFast_Click"/>
                     </StackPanel>
                     <Button x:Name="Next" Content="1 round" HorizontalAlignment="Left" Margin="0,10,0,0" Height="25" VerticalAlignment="Top" Width="Auto" Click="Next_Click"/>
                 </StackPanel>
