@@ -154,6 +154,7 @@ namespace Jums.GameOfLife.WindowsClient
             {
                 rectangle.Cursor = Cursors.Pen;
                 rectangle.MouseEnter += RectangleOnMouseEnter;
+                rectangle.MouseDown += RectangleOnMouseEnter;
             }
         }
 
@@ -163,6 +164,7 @@ namespace Jums.GameOfLife.WindowsClient
             {
                 rectangle.Cursor = null;
                 rectangle.MouseEnter -= RectangleOnMouseEnter;
+                rectangle.MouseDown -= RectangleOnMouseEnter;
             }
         }
 
@@ -201,7 +203,7 @@ namespace Jums.GameOfLife.WindowsClient
         {
             var buttons = new List<Button>
             {
-                Create, Stop, Next, Reset, Populate, Draw, Clear
+                Create, Next, Reset, Populate, Draw, Clear
             };
 
             buttons.ForEach(b => b.IsEnabled = enabled);
