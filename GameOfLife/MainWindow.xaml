@@ -44,7 +44,7 @@
                 <StackPanel>
                     <Label HorizontalAlignment="Center">Play</Label>
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="Stop" Content="■ Stop" HorizontalAlignment="Left" Height="25" Margin="0,0,10,0" VerticalAlignment="Top" Width="Auto" Click="Stop_Click"/>
+                        <Button x:Name="Stop" Content="■ Stop" HorizontalAlignment="Left" Height="25" Margin="0,0,10,0" VerticalAlignment="Top" Width="Auto" Click="Stop_Click" IsEnabled="False"/>
                         <Button x:Name="PlaySlow" Content="► Slow" HorizontalAlignment="Left" Height="25" Margin="0,0,10,0" VerticalAlignment="Top" Width="Auto" Click="PlaySlow_Click" />
                         <Button x:Name="PlayFast" Content="►► Fast" HorizontalAlignment="Left" Height="25" Margin="0,0,0,0" VerticalAlignment="Top" Width="Auto" Click="PlayFast_Click"/>
                     </StackPanel>

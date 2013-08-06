@@ -58,5 +58,23 @@
         {
             return greatMaker.CreateLife(world, seed);
         }
+
+        /// <summary>
+        /// Clears the current world empty of life.
+        /// </summary>
+        public void Clear()
+        {
+            world = world.CopyEmpty();
+        }
+
+        public void KillLifeAt(int x, int y)
+        {
+            world.SetLifeAt(x, y, false);
+        }
+
+        public void CreateLifeAt(int x, int y)
+        {
+            world.SetLifeAt(x, y, true);
+        }
     }
 }

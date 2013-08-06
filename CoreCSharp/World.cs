@@ -82,16 +82,24 @@ namespace Jums.GameOfLife.CoreCSharp
         }
 
         /// <summary>
-        /// Makes a copy of this object.
+        /// Makes a complete copy of this world.
         /// </summary>
         /// <returns></returns>
         public World Copy()
         {
-            return new World(Width, Height)
+            return new World(Width, Height, Wrapped)
             {
-                lifeStates = lifeStates.ToList(),
-                Wrapped = Wrapped
+                lifeStates = lifeStates.ToList()
             };
+        }
+
+        /// <summary>
+        /// Makes an empty copy of this world.
+        /// </summary>
+        /// <returns></returns>
+        public World CopyEmpty()
+        {
+            return new World(Width, Height, Wrapped);
         }
 
         /// <summary>
@@ -154,6 +162,18 @@ namespace Jums.GameOfLife.CoreCSharp
             }
 
             return positions;
+        }
+
+        /// <summary>
+        /// Sets life state at given cell coordinates.
+        /// </summary>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        /// <param name="isAlive">if set to <c>true</c> the cell is alive.</param>
+        public void SetLifeAt(int x, int y, bool isAlive)
+        {
+            int index = GetPositionIndex(x, y);
+            lifeStates[index] = isAlive;
         }
 
         private IEnumerable<Position> Wrap(IEnumerable<Position> positions)

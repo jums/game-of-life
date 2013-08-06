@@ -137,7 +137,7 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
         public void CopyShouldHaveSameLifeStatesAndDimensions()
         {
             var world = new World(12, 14, true);
-            greatMaker.CreateLife(simpleWorld);
+            greatMaker.CreateLife(world);
             World another = world.Copy();
             Assert.AreEqual(world.Width, another.Width);
             Assert.AreEqual(world.Height, another.Height);
@@ -150,6 +150,19 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
         {
             World another = simpleWorld.Copy();
             Assert.AreNotSame(simpleWorld, another);
+        }
+
+        [Test]
+        public void EmptyCopyShouldHaveSameSettingsNoLife()
+        {
+            var world = new World(12, 14, true);
+            greatMaker.CreateLife(world);
+            World another = world.CopyEmpty();
+            Assert.AreEqual(world.Width, another.Width);
+            Assert.AreEqual(world.Height, another.Height);
+            Assert.AreEqual(world.Wrapped, another.Wrapped);
+            CollectionAssert.AreNotEqual(world.State, another.State);
+            Assert.True(another.State.All(s => !s));
         }
 
         [Test]

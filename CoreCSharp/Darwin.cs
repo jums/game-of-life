@@ -22,7 +22,7 @@ namespace Jums.GameOfLife.CoreCSharp
 
         public World Evolve(World world)
         {
-            var evolution = world.Copy();
+            var evolution = world.CopyEmpty();
             var positions = world.GetPositions().ToList();
             var newStates = positions.AsParallel().Select(p => IsAlive(world, p.X, p.Y)).ToList();
             evolution.Import(newStates);

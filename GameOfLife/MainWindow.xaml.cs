@@ -15,14 +15,15 @@ namespace Jums.GameOfLife.WindowsClient
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly Brush LifeBrush = Brushes.GreenYellow;
-        private readonly Brush DeadBrush = Brushes.White;
+        private readonly Brush lifeBrush = Brushes.GreenYellow;
+        private readonly Brush deadBrush = Brushes.White;
         private const int SquareSize = 3;
         private const int SlowInterval = 400;
         private const int FastInterval = 100;
         private Game game;
         private Player player;
         private Dictionary<string, Rectangle> rectangles;
+        private Dictionary<Rectangle, Tuple<int, int>> rectanglesToCoordinates;
         private int? lastSeed;
 
         public MainWindow()
@@ -49,7 +50,7 @@ namespace Jums.GameOfLife.WindowsClient
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
-            NewGame();
+            game.Clear();
             RenderGame();
         }
 
@@ -57,16 +58,16 @@ namespace Jums.GameOfLife.WindowsClient
         {
             Draw.IsEnabled = false;
             DrawDone.Visibility = Visibility.Visible;
+            SetNonDrawControlsEnabled(false);
             StartDrawing();
-            // TODO
         }
 
         private void DrawDone_Click(object sender, RoutedEventArgs e)
         {
             Draw.IsEnabled = true;
             DrawDone.Visibility = Visibility.Hidden;
+            SetNonDrawControlsEnabled(true);
             StopDrawing();
-            // TODO
         }
 
         private void Reset_Click(object sender, RoutedEventArgs e)
@@ -91,16 +92,22 @@ namespace Jums.GameOfLife.WindowsClient
 
         private void PlaySlow_Click(object sender, RoutedEventArgs e)
         {
+            Stop.IsEnabled = true;
+            SetNonPlayControlsEnabled(false);
             StartPlaying(TimeSpan.FromMilliseconds(SlowInterval));
         }
 
         private void PlayFast_Click(object sender, RoutedEventArgs e)
         {
+            Stop.IsEnabled = true;
+            SetNonPlayControlsEnabled(false);
             StartPlaying(TimeSpan.FromMilliseconds(FastInterval));
         }
 
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
+            Stop.IsEnabled = false;
+            SetNonPlayControlsEnabled(true);
             StopPlaying();
         }
 
@@ -135,7 +142,7 @@ namespace Jums.GameOfLife.WindowsClient
                 for (int y = 0; y < game.Height; y++)
                 {
                     Rectangle rectangle = GetRectangle(x, y);
-                    Brush color = state[x, y] ? LifeBrush : DeadBrush;
+                    Brush color = state[x, y] ? lifeBrush : deadBrush;
                     rectangle.Fill = color;
                 }
             }
@@ -159,6 +166,16 @@ namespace Jums.GameOfLife.WindowsClient
             }
         }
 
+        private void SetNonDrawControlsEnabled(bool enabled)
+        {
+            var buttons = new List<Button>
+            {
+                Create, Stop, PlayFast, PlaySlow, Next, Reset, Populate
+            };
+
+            buttons.ForEach(b => b.IsEnabled = enabled);
+        }
+
         private Rectangle GetRectangle(int i, int j)
         {
             string key = GetRectangleKey(i, j);
@@ -180,6 +197,16 @@ namespace Jums.GameOfLife.WindowsClient
             }
         }
 
+        private void SetNonPlayControlsEnabled(bool enabled)
+        {
+            var buttons = new List<Button>
+            {
+                Create, Stop, Next, Reset, Populate, Draw, Clear
+            };
+
+            buttons.ForEach(b => b.IsEnabled = enabled);
+        }
+
         private void InitiateGameView()
         {
             WorldCanvas.Children.Clear();
@@ -187,24 +214,26 @@ namespace Jums.GameOfLife.WindowsClient
             WorldCanvas.Height = game.Height*SquareSize;
 
             rectangles = new Dictionary<string, Rectangle>();
+            rectanglesToCoordinates = new Dictionary<Rectangle, Tuple<int, int>>();
 
-            for (int i = 0; i < game.Width; i++)
+            for (int x = 0; x < game.Width; x++)
             {
-                int x = i*SquareSize;
+                int uiX = x*SquareSize;
 
-                for (int j = 0; j < game.Height; j++)
+                for (int y = 0; y < game.Height; y++)
                 {
-                    int y = j*SquareSize;
-                    var rectangle = AddRectangleToView(x, y);
-                    StoreRectangleToLookup(i, j, rectangle);
+                    int uiY = y*SquareSize;
+                    var rectangle = AddRectangleToView(uiX, uiY);
+                    StoreRectangleToLookups(x, y, rectangle);
                 }
             }
         }
 
-        private void StoreRectangleToLookup(int i, int j, Rectangle rectangle)
+        private void StoreRectangleToLookups(int x, int y, Rectangle rectangle)
         {
-            var key = GetRectangleKey(i, j);
+            var key = GetRectangleKey(x, y);
             rectangles[key] = rectangle;
+            rectanglesToCoordinates.Add(rectangle, new Tuple<int, int>(x, y));
         }
 
         private static string GetRectangleKey(int i, int j)
@@ -224,14 +253,17 @@ namespace Jums.GameOfLife.WindowsClient
         private void RectangleOnMouseEnter(object sender, MouseEventArgs e)
         {
             var rectangle = sender as Rectangle;
+            Tuple<int, int> coordinates = rectanglesToCoordinates[rectangle];
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                rectangle.Fill = LifeBrush;
+                rectangle.Fill = lifeBrush;
+                game.CreateLifeAt(coordinates.Item1, coordinates.Item2);
             }
             else if (e.RightButton == MouseButtonState.Pressed)
             {
-                rectangle.Fill = DeadBrush;
+                rectangle.Fill = deadBrush;
+                game.KillLifeAt(coordinates.Item1, coordinates.Item2);
             }
         }
     }
