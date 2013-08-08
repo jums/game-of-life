@@ -24,8 +24,10 @@ namespace Jums.GameOfLife.WindowsClient
             timer.Interval = interval;
             timer.Tick += (sender, args) =>
                 {
+                    timer.Stop();
                     SynchronizedEvolve();
                     draw();
+                    timer.Start();
                 };
             timer.Start();
         }
