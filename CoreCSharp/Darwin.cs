@@ -9,23 +9,24 @@ namespace Jums.GameOfLife.CoreCSharp
     /// </summary>
     internal class Darwin
     {
+        private World world;
+
         public World Evolve(World world)
         {
+            if (world == null) throw new ArgumentNullException("world");
+            this.world = world;
             var evolution = world.CopyEmpty();
             var positions = world.GetPositions().ToList();
-            var newStates = positions.AsParallel().Select(p => IsAlive(world, p.X, p.Y)).ToList();
+            var newStates = positions.AsParallel().Select(p => IsAlive(p.X, p.Y)).ToList();
             evolution.Import(newStates);
             return evolution;
         }
 
-        public bool IsAlive(World world, int x, int y)
+        private bool IsAlive(int x, int y)
         {
-            if (world == null) throw new ArgumentNullException("world");
-
             IEnumerable<Position> positions = world.GetAdjacentPositions(x, y);
             bool currentlyAlive = world.IsAlive(x, y);
-
-            return ApplyLaws(currentlyAlive, positions, world);
+            return ApplyLaws(currentlyAlive, positions);
         }
 
         /// <summary>
@@ -37,9 +38,8 @@ namespace Jums.GameOfLife.CoreCSharp
         /// </summary>
         /// <param name="currentlyAlive">if set to <c>true</c> [currently alive].</param>
         /// <param name="adjacentPositions">The adjacent positions.</param>
-        /// <param name="world">The world.</param>
         /// <returns></returns>
-        private bool ApplyLaws(bool currentlyAlive, IEnumerable<Position> adjacentPositions, World world)
+        private bool ApplyLaws(bool currentlyAlive, IEnumerable<Position> adjacentPositions)
         {
             int adjacentAlive = adjacentPositions.Count(p => world.IsAlive(p.X, p.Y));
 

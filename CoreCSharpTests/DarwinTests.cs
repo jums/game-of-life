@@ -9,20 +9,20 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
     internal class DarwinTests
     {
         private Darwin darwin;
-        private World world;
+        private World commonWorld;
 
         [TestFixtureSetUp]
         public void SetUp()
         {
             darwin = new Darwin();
-            world = new World(10, 10);
+            commonWorld = new World(10, 10);
         }
 
         [Test]
         [ExpectedException("System.ArgumentNullException")]
         public void IsAliveShouldThrowWithNullWorld()
         {
-            darwin.IsAlive(null, 1, 1);
+            darwin.Evolve(null);
         }
 
         [Test]
@@ -32,8 +32,7 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
                              -x-
                              --- ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data));
         }
 
         [Test]
@@ -43,15 +42,13 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
                               -x-
                               --- ";
 
-            world.Import(ConvertToWorldData(data1, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data1));
 
             string data2 = @" ---
                               -x-
                               -x- ";
 
-            world.Import(ConvertToWorldData(data2, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data2));
         }
 
         [Test]
@@ -61,15 +58,13 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
                               -x-
                               --- ";
 
-            world.Import(ConvertToWorldData(data1, 10, 10));
-            Assert.True(darwin.IsAlive(world, 1, 1));
+            Assert.True(IsCenterAliveAfterEvolution(commonWorld, data1));
 
             string data2 = @" x--
                               -x-
                               -x- ";
 
-            world.Import(ConvertToWorldData(data2, 10, 10));
-            Assert.True(darwin.IsAlive(world, 1, 1));
+            Assert.True(IsCenterAliveAfterEvolution(commonWorld, data2));
         }
 
         [Test]
@@ -79,17 +74,14 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
                               -x-
                               --- ";
 
-            world.Import(ConvertToWorldData(data1, 10, 10));
-            Assert.True(darwin.IsAlive(world, 1, 1));
+            Assert.True(IsCenterAliveAfterEvolution(commonWorld, data1));
 
             string data2 = @" x--
                               -x-
                               -xx ";
 
-            world.Import(ConvertToWorldData(data2, 10, 10));
-            Assert.True(darwin.IsAlive(world, 1, 1));
+            Assert.True(IsCenterAliveAfterEvolution(commonWorld, data2));
         }
-
 
         [Test]
         public void IsAliveShouldBeFalseWhenFourOrMoreAlive()
@@ -98,43 +90,37 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
                              -x-
                              x-- ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data));
 
             data = @" x--
                       -xx
                       -xx ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data));
 
             data = @" x--
                       xxx
                       xx- ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data));
 
             data = @" x-x
                       xxx
                       -xx ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data));
 
             data = @" xxx
                       xxx
                       -xx ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data));
 
             data = @" xxx
                       xxx
                       xxx ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data));
         }
 
         [Test]
@@ -144,22 +130,19 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
                              ---
                              x-- ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.True(darwin.IsAlive(world, 1, 1));
+            Assert.True(IsCenterAliveAfterEvolution(commonWorld, data));
 
             data = @" xxx
                       ---
                       --- ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.True(darwin.IsAlive(world, 1, 1));
+            Assert.True(IsCenterAliveAfterEvolution(commonWorld, data));
 
             data = @" x--
                       --x
                       -x- ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.True(darwin.IsAlive(world, 1, 1));
+            Assert.True(IsCenterAliveAfterEvolution(commonWorld, data));
         }
 
         [Test]
@@ -169,15 +152,13 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
                              ---
                              x-- ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data));
 
             data = @" ---
                       --x
                       --- ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data));
         }
 
         [Test]
@@ -187,43 +168,45 @@ namespace Jums.GameOfLife.CoreCSharp.Tests
                              ---
                              x-- ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data));
 
             data = @" x--
                       --x
                       -xx ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data));
 
             data = @" x--
                       x-x
                       xx- ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data));
 
             data = @" x-x
                       x-x
                       -xx ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data));
 
             data = @" xxx
                       x-x
                       -xx ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data));
 
             data = @" xxx
                       x-x
                       xxx ";
 
-            world.Import(ConvertToWorldData(data, 10, 10));
-            Assert.False(darwin.IsAlive(world, 1, 1));
+            Assert.False(IsCenterAliveAfterEvolution(commonWorld, data));
+        }
+
+        private bool IsCenterAliveAfterEvolution(World world, string data)
+        {
+            var worldState = ConvertToWorldData(data, world.Width, world.Height);
+            world.Import(worldState);
+            var evolution = darwin.Evolve(world);
+            return evolution.IsAlive(1, 1);
         }
 
         private static IEnumerable<bool> ConvertToWorldData(string data, int width, int height)
