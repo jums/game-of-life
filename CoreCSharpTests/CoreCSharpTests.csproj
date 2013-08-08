@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="DarwinTests.cs" />
     <Compile Include="GreatMakerTests.cs" />
+    <Compile Include="PerformanceTesets.cs" />
     <Compile Include="WorldTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
