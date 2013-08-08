@@ -34,6 +34,18 @@ namespace Jums.GameOfLife.CoreCSharp
         public int Height { get; private set; }
         public bool Wrapped { get; set; } // Yeah, a flat world can suddenly become round, like in real life.
 
+        public static Position[] AdjacencyModifiers = new[]
+        {
+            new Position(x: -1, y: -1),
+            new Position(x: -1, y: 0),
+            new Position(x: -1, y: 1),
+            new Position(x: 1, y: -1),
+            new Position(x: 1, y: 0),
+            new Position(x: 1, y: 1),
+            new Position(x: 0, y: -1),
+            new Position(x: 0, y: 1)
+        };
+
         /// <summary>
         /// Enumeration of all positions life states in the world.
         /// </summary>
@@ -125,13 +137,9 @@ namespace Jums.GameOfLife.CoreCSharp
         /// <returns></returns>
         public IEnumerable<Position> GetPositions()
         {
-            for (int y = 0; y < Height; y++)
-            {
-                for (int x = 0; x < Width; x++)
-                {
-                    yield return new Position(x, y);
-                }
-            }
+            return from y in Enumerable.Range(0, Height)
+                   from x in Enumerable.Range(0, Width)
+                   select new Position(x, y);
         }
 
         /// <summary>
@@ -142,23 +150,11 @@ namespace Jums.GameOfLife.CoreCSharp
         /// <returns></returns>
         public IEnumerable<Position> GetAdjacentPositions(int x, int y)
         {
-            var modifiers = new[]
-            {
-                new {x = -1, y = -1},
-                new {x = -1, y = 0},
-                new {x = -1, y = 1},
-                new {x = 1, y = -1},
-                new {x = 1, y = 0},
-                new {x = 1, y = 1},
-                new {x = 0, y = -1},
-                new {x = 0, y = 1}
-            };
-
-            var positions = modifiers.Select(m => new Position(x + m.x, y + m.y));
+            var positions = AdjacencyModifiers.Select(m => new Position(x + m.X, y + m.Y));
 
             if (Wrapped)
             {
-                positions = Wrap(positions);
+                positions = positions.Select(Wrap);
             }
 
             return positions;
@@ -174,11 +170,6 @@ namespace Jums.GameOfLife.CoreCSharp
         {
             int index = GetPositionIndex(x, y);
             lifeStates[index] = isAlive;
-        }
-
-        private IEnumerable<Position> Wrap(IEnumerable<Position> positions)
-        {
-            return positions.Select(Wrap);
         }
 
         private Position Wrap(Position position)
