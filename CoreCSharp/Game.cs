@@ -36,6 +36,9 @@
             get { return world.Height; }
         }
 
+        /// <summary>
+        /// World life states.
+        /// </summary>
         public bool[,] State
         {
             get { return world.To2DArray(); }
@@ -60,18 +63,28 @@
         }
 
         /// <summary>
-        /// Clears the current world empty of life.
+        /// Kills all life on the world.
         /// </summary>
         public void Clear()
         {
             world = world.CopyEmpty();
         }
 
+        /// <summary>
+        /// Kills life at given coordinates, if it's there. If not, do nothing.
+        /// </summary>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
         public void KillLifeAt(int x, int y)
         {
             world.SetLifeAt(x, y, false);
         }
 
+        /// <summary>
+        /// Creates life at given coordinates, if it's not there already. If it is, do nothing.
+        /// </summary>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
         public void CreateLifeAt(int x, int y)
         {
             world.SetLifeAt(x, y, true);
